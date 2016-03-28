@@ -1,11 +1,14 @@
 //Classe filha de usuario
 package com.infopower.entidades;
 
-public class Cliente extends Usuario{
+public class Cliente extends Pessoa{
 
-	public Cliente(String nome, String login, String senha, int telefone) {
+	public Cliente(String nome, String login, String senha, Endereco endereco, String telefone) {
 		//Utilização da herança
-		super(nome,login,senha,telefone);
+		super(nome,login,senha,endereco,telefone);
+	}
+	public Cliente(){
+		super();
 	}
 
 	private int id;

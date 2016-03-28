@@ -2,59 +2,42 @@ package com.infopower.entidades;
 
 public class Tarifa {
 
-	private int id;
-	private double valorKw;
-	private double valorBandeiraVermelha;
-	private double valorBandeiraAmarela;
-	private double valorBandeiraVerde;
+	private int idTarifa;
+	private String nome;
+	private double valor;
+	public Tarifa(int idTarifa, String nome, double valor) {
+		super();
+		this.idTarifa = idTarifa;
+		this.nome = nome;
+		this.valor = valor;
+	}
 	
-	public Tarifa(int id, double valorKw, double valorBandeiraVermelha, double valorBandeiraAmarela, 
-			double valorBandeiraVerde) {
+	public Tarifa(){
+		
+	}
+
+	public int getIdTarifa() {
+		return idTarifa;
+	}
+
+	public void setIdTarifa(int idTarifa) {
+		this.idTarifa = idTarifa;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public double getValor() {
+		return valor;
+	}
+
+	public void setValor(double valor) {
+		this.valor = valor;
+	}
 	
-		this.id = id;
-		this.valorKw = valorKw;
-		this.valorBandeiraVermelha = valorBandeiraVermelha;
-		this.valorBandeiraAmarela = valorBandeiraAmarela;
-		this.valorBandeiraVerde = valorBandeiraVerde;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public double getValorKw() {
-		return valorKw;
-	}
-
-	public void setValorKw(double valorKw) {
-		this.valorKw = valorKw;
-	}
-
-	public double getValorBandeiraVermelha() {
-		return valorBandeiraVermelha;
-	}
-
-	public void setValorBandeiraVermelha(double valorBandeiraVermelha) {
-		this.valorBandeiraVermelha = valorBandeiraVermelha;
-	}
-
-	public double getValorBandeiraAmarela() {
-		return valorBandeiraAmarela;
-	}
-
-	public void setValorBandeiraAmarela(double valorBandeiraAmarela) {
-		this.valorBandeiraAmarela = valorBandeiraAmarela;
-	}
-
-	public double getValorBandeiraVerde() {
-		return valorBandeiraVerde;
-	}
-
-	public void setValorBandeiraVerde(double valorBandeiraVerde) {
-		this.valorBandeiraVerde = valorBandeiraVerde;
-	}
 }

@@ -7,23 +7,25 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import com.infopower.entidades.Cliente;
 
-public class clienteDAO {
+public class clienteDAO implements InterfaceCliente{
 
 	Connection con = connection.getConnection();
 	List<Cliente> lista = new ArrayList<Cliente>();
 
 	public void cadastrar(Cliente cliente) {
-		String sql = "INSERT INTO CLIENTE (id, nome, login, senha, telefone) values (?,?,?,?,?)";
+		String sql = "INSERT INTO CLIENTE (nome, login, senha, telefone, cpf_cliente) values (?,?,?,?,?)";
 
 		try {
 			PreparedStatement preparador = con.prepareStatement(sql);
-			preparador.setInt(1, cliente.getId());
-			preparador.setString(2, cliente.getNome());
-			preparador.setString(3, cliente.getLogin());
-			preparador.setString(4, cliente.getSenha());
-			preparador.setInt(5, cliente.getTelefone());
+			preparador.setString(1, cliente.getNome());
+			preparador.setString(2, cliente.getLogin());
+			preparador.setString(3, cliente.getSenha());
+			preparador.setString(4, cliente.getTelefone());
+			preparador.setInt(5, cliente.getCpf());
 			preparador.execute();
 			preparador.close();
 
@@ -32,19 +34,40 @@ public class clienteDAO {
 
 			e.printStackTrace();
 		}
+		String sql2 = "INSERT INTO ENDERECO (logradouro, numero, bairro, cidade, cep, estado, pais) values (?,?,?,?,?,?,?)";
+
+		try {
+			PreparedStatement preparador = con.prepareStatement(sql2);
+			preparador.setString(1, cliente.getLogradouro());
+			preparador.setInt(2, cliente.getNumero());
+			preparador.setString(3, cliente.getBairro());
+			preparador.setString(4, cliente.getCidade());
+			preparador.setInt(5, cliente.getCep());
+			preparador.setString(6, cliente.getEstado());
+			preparador.setString(7, cliente.getPais());
+			preparador.execute();
+			preparador.close();
+
+			System.out.println("Cadastrado com SUCESSO!");
+		} catch (SQLException e) {
+			
+			JOptionPane.showMessageDialog(null, "Não foi possível salvar no banco!"+ e);
+		}
 	}
 
 	public void alterar(Cliente cliente) {
-		String sql = "UPDATE CLIENTE SET id=?, nome=?, login=?, senha=?, telefone=? WHERE id=?";
+		String sql = "UPDATE CLIENTE SET id_pessoa=?, nome=?, endereco=?, login=?, senha=?, telefone=?, cpf_cliente=? WHERE id_pessoa=?";
 
 		try {
 			PreparedStatement preparador = con.prepareStatement(sql);
 			preparador.setInt(1, cliente.getId());
 			preparador.setString(2, cliente.getNome());
-			preparador.setString(3, cliente.getLogin());
-			preparador.setString(4, cliente.getSenha());
-			preparador.setInt(5, cliente.getTelefone());
-			preparador.setInt(6, cliente.getId());
+			preparador.setString(3, cliente.getEnd().getLogradouro());
+			preparador.setString(4, cliente.getLogin());
+			preparador.setString(5, cliente.getSenha());
+			preparador.setString(6, cliente.getTelefone());
+			preparador.setInt(7, cliente.getCpf());
+			preparador.setInt(8, cliente.getId());
 
 			preparador.execute();
 			preparador.close();
@@ -52,12 +75,12 @@ public class clienteDAO {
 			System.out.println("Alterado com SUCESSO!");
 		} catch (SQLException e) {
 
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, e);
 		}
 	}
 
 	public void excluir(Cliente cliente) {
-		String sql = "DELETE FROM CLIENTE WHERE id=?";
+		String sql = "DELETE FROM CLIENTE WHERE id_cliente=?";
 
 		try {
 			PreparedStatement preparador = con.prepareStatement(sql);
@@ -83,12 +106,12 @@ public class clienteDAO {
 
 			while (resultado.next()) {
 
-				Cliente cliente = new Cliente("", "", "", 0);
-				cliente.setId(resultado.getInt("id"));
+				Cliente cliente = new Cliente();
+				cliente.setId(resultado.getInt("id_cliente"));
 				cliente.setNome(resultado.getString("nome"));
 				cliente.setLogin(resultado.getString("login"));
 				cliente.setSenha(resultado.getString("senha"));
-				cliente.setTelefone(resultado.getInt("telefone"));
+				cliente.setTelefone(resultado.getString("telefone"));
 				clientes.add(cliente);
 			}
 
@@ -110,12 +133,12 @@ public class clienteDAO {
 			preparador.setInt(1, id);
 
 			ResultSet resultado = preparador.executeQuery();
-			cliente = new Cliente("", "", "", 0);
+			cliente = new Cliente();
 			cliente.setId(resultado.getInt("id"));
 			cliente.setNome(resultado.getString("nome"));
 			cliente.setLogin(resultado.getString("login"));
 			cliente.setSenha(resultado.getString("senha"));
-			cliente.setTelefone(resultado.getInt("telefone"));
+			cliente.setTelefone(resultado.getString("telefone"));
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -133,13 +156,13 @@ public class clienteDAO {
 
 			ResultSet resultado = preparador.executeQuery();
 			while (resultado.next()) {
-				Cliente cliente = new Cliente("", "", "", 0);
+				Cliente cliente = new Cliente();
 
 				cliente.setId(resultado.getInt("id"));
 				cliente.setNome(resultado.getString("nome"));
 				cliente.setLogin(resultado.getString("login"));
 				cliente.setSenha(resultado.getString("senha"));
-				cliente.setTelefone(resultado.getInt("telefone"));
+				cliente.setTelefone(resultado.getString("telefone"));
 				lista.add(cliente);
 			}
 
@@ -149,7 +172,7 @@ public class clienteDAO {
 
 		return lista;
 	}
-
+	
 	public Cliente autenticar(Cliente cliente) {
 		String sql = "SELECT * FROM Cliente WHERE login=? and senha=?";
 		Cliente clienteRetorno = null;
@@ -160,13 +183,13 @@ public class clienteDAO {
 
 			ResultSet resultado = preparador.executeQuery();
 			if (resultado.next()) {
-				clienteRetorno = new Cliente("", "", "", 0);
+				clienteRetorno = new Cliente();
 
 				clienteRetorno.setId(resultado.getInt("id"));
 				clienteRetorno.setNome(resultado.getString("nome"));
 				clienteRetorno.setLogin(resultado.getString("login"));
 				clienteRetorno.setSenha(resultado.getString("senha"));
-				clienteRetorno.setTelefone(resultado.getInt("telefone"));
+				clienteRetorno.setTelefone(resultado.getString("telefone"));
 
 			}
 

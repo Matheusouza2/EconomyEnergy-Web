@@ -8,22 +8,28 @@ import com.infopower.jdbcConnection.clienteDAO;
 public class testeDAO {
 
 	public static void main(String[] args) {
-		// testeCadastrar();
-		// testeAlterar();
-		// testeExcluir();
-		// testeListar();
-		testeAutenticar();
+		//testeCadastrar();
+		//testeAlterar();
+		testeExcluir();
+		//testeListar();
+		//testeAutenticar();
 
 	}
 
 	private static void testeCadastrar() {
-		Cliente cliente = new Cliente("", "", "", 0);
-		cliente.setId(004);
-		cliente.setCpf(89977666);
-		cliente.setNome("Pedro Silva");
-		cliente.setLogin("pesil");
+		Cliente cliente = new Cliente();
+		cliente.setNome("pedro");
+		cliente.setLogin("pe");
 		cliente.setSenha("5678");
-		cliente.setTelefone(95544433);
+		cliente.setTelefone("555555");
+		cliente.setCpf(8888888);
+		cliente.setLogradouro("Rua dois");
+		cliente.setNumero(23);
+		cliente.setBairro("centro");
+		cliente.setCidade("São Joaquim");
+		cliente.setEstado("Pernambuco");
+		cliente.setCep(55670000);
+		cliente.setPais("Brasil");
 
 		clienteDAO clientedao = new clienteDAO();
 		clientedao.cadastrar(cliente);
@@ -31,13 +37,21 @@ public class testeDAO {
 
 	private static void testeAlterar() {
 
-		Cliente cliente = new Cliente("", "", "", 0);
-		cliente.setId(002);
+		Cliente cliente = new Cliente();
+		cliente.setId(001);
 		cliente.setCpf(777777777);
 		cliente.setNome("Mary kat");
+		cliente.setId(cliente.getEnd().getId(001));
+		cliente.setLogradouro(cliente.getLogradouro());
+		cliente.setNumero(cliente.getNumero());
+		cliente.setBairro(cliente.getBairro());
+		cliente.setCidade(cliente.getCidade());
+		cliente.setEstado(cliente.getEstado());
+		cliente.setCep(cliente.getCep());
+		cliente.setPais(cliente.getPais());
 		cliente.setLogin("mary");
 		cliente.setSenha("mk5678");
-		cliente.setTelefone(444444443);
+		cliente.setTelefone("444444443");
 
 		clienteDAO clientedao = new clienteDAO();
 		clientedao.alterar(cliente);
@@ -46,8 +60,8 @@ public class testeDAO {
 
 	private static void testeExcluir() {
 
-		Cliente cliente = new Cliente("", "", "", 0);
-		cliente.setId(004);
+		Cliente cliente = new Cliente();
+		cliente.setId(0);
 
 		clienteDAO clientedao = new clienteDAO();
 		clientedao.excluir(cliente);
@@ -66,7 +80,7 @@ public class testeDAO {
 	}
 
 	public static void testeAutenticar() {
-		Cliente cliente = new Cliente("", "", "", 0);
+		Cliente cliente = new Cliente();
 		cliente.setLogin("majo");
 		cliente.setSenha("4321");
 
