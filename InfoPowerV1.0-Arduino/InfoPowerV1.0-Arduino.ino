@@ -36,19 +36,18 @@ void loop(){
   Serial.print(irms);
   Serial.println(" A \t");
   
-  enviarDados(irms, potencia, kw);
+  enviarDados(irms, potencia);
  
   delay(1000);   //Agaurda 1 segundo para continuar.
 }
  
-void enviarDados(double irms, double potencia, double kw){
+void enviarDados(double irms, double potencia){
   //Define o IP e porta de conexão remota
   cliente.connect("192.168.0.110",9091);
   //Se tiver conexão com o caminho especificado ele faz um GET com os valores irms,potencia e kw
   if(cliente.connected()){
     cliente.print("GET /InfoPower/ArduinoServlet?ampers="); cliente.print(irms);
     cliente.print("&potencia="); cliente.print(potencia);
-    cliente.print("&kw="); cliente.print(kw);
     cliente.println(" HTTP/1.1");
     cliente.println("Host: 192.168.0.110");
     cliente.println();    
