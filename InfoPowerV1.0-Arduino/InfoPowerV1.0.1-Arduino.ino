@@ -26,9 +26,8 @@ void setup()
 }
 
 void loop(){
-  double irms = sensor.calcIrms(1480);
-  double potencia = irms*220.0;
-  double kw = potencia*1000;
+  double irms = sensor.calcIrms(1480);  //Calculo padrão para leitura de irms(Amper)
+  double potencia = irms*220.0;         //Calculo de potencia (potencia = ampers * voltagem)
   
   Serial.print("Potencia: ");
   Serial.print(potencia);
@@ -36,37 +35,18 @@ void loop(){
   Serial.print("Corrente: ");
   Serial.print(irms);
   Serial.println(" A \t");
-  Serial.print("kW: ");
-  Serial.println(kw);
-  Serial.println();
-  delay(1000);
+  
   enviarDados(irms, potencia, kw);
-}double irms = sensor.calcIrms(1480);   //Calculo padrão para leitura de irms(Amper)
-  double potencia = irms*220.0;          //Calculo de potencia (potencia = ampers * voltagem)
-  double kw = potencia*1000;             //Calculo do kW (potencia * 1000) tendo que a potencia é em Watts
-
-  //Inicia a impressão dos dados na Serial
-  Serial.print("Potencia: ");
-  Serial.print(potencia);
-  Serial.println(" W");         
-  Serial.print("Corrente: ");
-  Serial.print(irms);
-  Serial.println(" A \t");
-  Serial.print("kW: ");
-  Serial.println(kw);
-  Serial.println();
-  
-  delay(1000);   //Aguarda 1 segundo a cada loop/final de cada impressão
-
-  enviarDados(irms, potencia, kw);//Chamada do metodo enviarDados
+ 
+  delay(1000);   //Agaurda 1 segundo para continuar.
 }
-
+ 
 void enviarDados(double irms, double potencia, double kw){
   //Define o IP e porta de conexão remota
   cliente.connect("192.168.0.110",9091);
   //Se tiver conexão com o caminho especificado ele faz um GET com os valores irms,potencia e kw
   if(cliente.connected()){
-    cliente.print("GET /Arduino/ArduinoServlet?ampers="); cliente.print(irms);
+    cliente.print("GET /InfoPower/ArduinoServlet?ampers="); cliente.print(irms);
     cliente.print("&potencia="); cliente.print(potencia);
     cliente.print("&kw="); cliente.print(kw);
     cliente.println(" HTTP/1.1");
