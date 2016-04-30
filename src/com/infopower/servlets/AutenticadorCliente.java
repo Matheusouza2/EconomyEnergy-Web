@@ -1,6 +1,8 @@
 package com.infopower.servlets;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -41,10 +43,15 @@ public class AutenticadorCliente extends HttpServlet {
 			HttpSession session =  request.getSession();
 			session.setAttribute("clienteLogado", clienteRetorno);
 			
+			// vamos obter o valor do timeout da sessão
+		    int timeout = session.getMaxInactiveInterval(); 
+		    response.getWriter().println("Timeout: " + timeout);
+			
 			//encaminhando ao index
 			response.sendRedirect("JSP/Usuario.jsp");
 		}else{
 			response.sendRedirect("naoLogado.html");
+			
 		}	
 	}
 }

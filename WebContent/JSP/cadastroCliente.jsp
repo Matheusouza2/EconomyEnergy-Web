@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page import="com.infopower.entidades.Cliente"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,9 +20,10 @@
 
     <!-- Bootstrap Core CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
-
+	<link href="./css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="../css/admin.css" rel="stylesheet">
+    <link href="./css/admin.css" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -33,6 +35,10 @@
 </head>
 
 <body>
+
+<%
+Cliente cliente = (Cliente) request.getAttribute("cliente");
+%>
 
     <div id="wrapper">
 
@@ -60,7 +66,7 @@
 <div class="col-md-5 col-sm-5">
 
 
-<form class="form-horizontal" action="/InfoPower/ClienteServlet" method="post">
+<form class="form-horizontal" action="/InfoPower/ClienteServlet?acao=salv" method="post">
     <fieldset>
 
 <!-- Form Name -->
@@ -89,7 +95,7 @@
                 <label class="col-md-4 control-label" for="Logininput">Login Cliente</label>
                 <div class="col-md-8">
 
-                    <input id="Nomeinput" name="loginUser" type="text" placeholder="Seu Login" class="form-control input-md" required>
+                    <input id="Nomeinput"  name="loginUser" type="text" placeholder="Seu Login" class="form-control input-md" required>
 
                 </div>
             </div>
@@ -105,9 +111,9 @@
 
             <!-- Text input-->
             <div class="form-group">
-                <label class="col-md-4 control-label" for="Enderecoinput">Endereço</label>
+                <label class="col-md-4 control-label" for="Enderecoinput">Logradouro</label>
                 <div class="col-md-8">
-                    <input id="Enderecoinput" name="enderecoUser" type="text" placeholder="Endereço" class="form-control input-md" >
+                    <input id="Enderecoinput"  name="enderecoUser" type="text" placeholder="Endereço" class="form-control input-md" >
 
                 </div>
             </div>
@@ -116,7 +122,7 @@
             <div class="form-group">
                 <label class="col-md-4 control-label" for="Bairroinput">Bairro</label>
                 <div class="col-md-8">
-                    <input id="Bairroinput" name="bairroUser" type="text" placeholder="Bairro" class="form-control input-md">
+                    <input id="Bairroinput"   name="bairroUser" type="text" placeholder="Bairro" class="form-control input-md">
 
                 </div>
             </div>
@@ -125,7 +131,7 @@
             <div class="form-group">
                 <label class="col-md-4 control-label" for="cepinput1">Numero</label>
                 <div class="col-md-8">
-                    <input id="cepinput1" name="numeroUser" type="number" placeholder="Numero" class="form-control input-md" required>
+                    <input id="cepinput1"  name="numeroUser" type="number" placeholder="Numero" class="form-control input-md" required>
                 </div>
             </div>
 
@@ -134,7 +140,7 @@
                 <label class="col-md-4 control-label" for="cepinput">CEP</label>
                 <div class="col-md-8">
 
-                    <input id="cepinput" name="cepUser" type="" placeholder="Cep" class="form-control input-md" required>
+                    <input id="cepinput"  name="cepUser" type="" placeholder="Cep" class="form-control input-md" required>
 
                 </div>
             </div>
@@ -143,7 +149,7 @@
             <div class="form-group">
                 <label class="col-md-4 control-label" for="cepinput1">Cidade</label>
                 <div class="col-md-8">
-                    <input id="cepinput1" name="cidadeUser" type="text" placeholder="Cidade" class="form-control input-md" required>
+                    <input id="cepinput1"  name="cidadeUser" type="text" placeholder="Cidade" class="form-control input-md" required>
                 </div>
             </div>
 
@@ -151,7 +157,7 @@
             <div class="form-group">
                 <label class="col-md-4 control-label" for="Estadoinput">Estado</label>
                 <div class="col-md-8">
-                    <input id="Estadoinput" name="estadoUser" type="text" placeholder="Estado" class="form-control input-md">
+                    <input id="Estadoinput"  name="estadoUser" type="text" placeholder="Estado" class="form-control input-md">
 
                 </div>
             </div>
@@ -169,7 +175,7 @@
             <div class="form-group">
                 <label class="col-md-4 control-label" for="passwordinput">Senha</label>
                 <div class="col-md-8">
-                    <input id="passwordinput" name="senhaUser" type="password" placeholder="Digite uma Senha" class="form-control input-md" required>
+                    <input id="passwordinput"  name="senhaUser" type="password" placeholder="Digite uma Senha" class="form-control input-md" required>
 
                 </div>
             </div>
@@ -178,7 +184,7 @@
             <div class="form-group">
                 <label class="col-md-4 control-label" for="button1id"></label>
                 <div class="col-md-8">
-                    <button type="submit" id="button1id" name="button1id" class="btn btn-success"><i class="fa fa-floppy-o"></i> Salvar</button>
+                    <button data-toggle="modal" data-target="#myModal" type="submit" id="button1id" name="button1id" class="btn btn-success"><i class="fa fa-floppy-o"></i> Salvar</button>
                     <button type="reset" id="button2id" name="button2id" class="btn btn-danger"><i class="fa fa-times"></i> Cancelar</button>
                 </div>
             </div>
@@ -190,8 +196,6 @@
 </div>
         </div>
 
-    </fieldset>
-</form>
 
 
        <!-------------------FORMULARIO -------------------------->

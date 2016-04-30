@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import com.infopower.exception.ClienteExisteException;
 
 import javax.swing.JOptionPane;
 
@@ -20,7 +21,7 @@ public class ClienteDAO implements InterfaceCliente{
 	
 	public void cadastrar(Cliente cliente, Endereco endereco) {
 		String sql = "INSERT INTO CLIENTE (nome, login, senha, telefone, cpf_cliente, logradouro, numero, bairro, cidade, cep, estado, pais) values (?,?,?,?,?,?,?,?,?,?,?,?)";
-		System.out.println(cliente.getBairro()+""+cliente.getCidade()+"\n"+endereco.getBairro()+""+endereco.getCidade());
+		//System.out.println(cliente.getBairro()+""+cliente.getCidade()+"\n"+endereco.getBairro()+""+endereco.getCidade());
 		try {
 			PreparedStatement preparador = con.prepareStatement(sql);
 			preparador.setString(1, cliente.getNome());
@@ -45,19 +46,24 @@ public class ClienteDAO implements InterfaceCliente{
 		}
 }
 
-	public void alterar(Cliente cliente) {
-		String sql = "UPDATE CLIENTE SET id_pessoa=?, nome=?, endereco=?, login=?, senha=?, telefone=?, cpf_cliente=? WHERE id_pessoa=?";
+	public void alterar(Cliente cliente, Endereco endereco) {
+		String sql = "UPDATE CLIENTE SET  nome=?, login=?, senha=?, telefone=?, cpf_cliente=?, logradouro=?, numero=?, bairro=?, cidade=?, cep=?, estado=?, pais=? WHERE id_cliente=?";
 
 		try {
 			PreparedStatement preparador = con.prepareStatement(sql);
-			preparador.setInt(1, cliente.getId());
-			preparador.setString(2, cliente.getNome());
-			preparador.setString(3, cliente.getEnd().getLogradouro());
-			preparador.setString(4, cliente.getLogin());
-			preparador.setString(5, cliente.getSenha());
-			preparador.setString(6, cliente.getTelefone());
-			preparador.setString(7, cliente.getCpf());
-			preparador.setInt(8, cliente.getId());
+			preparador.setString(1, cliente.getNome());
+			preparador.setString(2, cliente.getLogin());
+			preparador.setString(3, cliente.getSenha());
+			preparador.setString(4, cliente.getTelefone());
+			preparador.setString(5, cliente.getCpf());
+			preparador.setString(6, endereco.getLogradouro());
+			preparador.setInt(7, endereco.getNumero());
+			preparador.setString(8, endereco.getBairro());
+			preparador.setString(9, endereco.getCidade());
+			preparador.setInt(10, endereco.getCep());
+			preparador.setString(11, endereco.getEstado());
+			preparador.setString(12, endereco.getPais());
+			preparador.setInt(13, cliente.getId());
 
 			preparador.execute();
 			preparador.close();
@@ -124,19 +130,31 @@ public class ClienteDAO implements InterfaceCliente{
 	}
 
 	public Cliente procurar(Integer id) {
-		String sql = "SELECT * FROM Cliente WHERE ID=?";
+		String sql = "SELECT * FROM Cliente WHERE ID_CLIENTE=?";
 		Cliente cliente = null;
 		try {
 			PreparedStatement preparador = con.prepareStatement(sql);
 			preparador.setInt(1, id);
 
 			ResultSet resultado = preparador.executeQuery();
+			
+			resultado.next();
+			
 			cliente = new Cliente();
-			cliente.setId(resultado.getInt("id"));
+			cliente.setId(resultado.getInt("id_cliente"));
 			cliente.setNome(resultado.getString("nome"));
 			cliente.setLogin(resultado.getString("login"));
 			cliente.setSenha(resultado.getString("senha"));
 			cliente.setTelefone(resultado.getString("telefone"));
+			cliente.setBairro(resultado.getString("bairro"));
+			cliente.setLogradouro(resultado.getString("logradouro"));
+			cliente.setNumero(resultado.getInt("numero"));
+			cliente.setCidade(resultado.getString("cidade"));
+			cliente.setCep(resultado.getInt("cep"));
+			cliente.setEstado(resultado.getString("estado"));
+			cliente.setPais(resultado.getString("pais"));
+			cliente.setCpf(resultado.getString("cpf_cliente"));
+			resultado.close();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -156,7 +174,7 @@ public class ClienteDAO implements InterfaceCliente{
 			while (resultado.next()) {
 				Cliente cliente = new Cliente();
 
-				cliente.setId(resultado.getInt("id"));
+				cliente.setId(resultado.getInt("id_cliente"));
 				cliente.setNome(resultado.getString("nome"));
 				cliente.setLogin(resultado.getString("login"));
 				cliente.setSenha(resultado.getString("senha"));
@@ -211,6 +229,21 @@ public class ClienteDAO implements InterfaceCliente{
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+		return existe;
+	}
+	public Boolean Existe(Cliente cliente) throws SQLException {
+		String sql = "SELECT * FROM Cliente WHERE id_cliente=?";
+		boolean existe = false;
+		try {
+			PreparedStatement preparador = con.prepareStatement(sql);
+			preparador.setInt(1, cliente.getId());
+
+			ResultSet resultado = preparador.executeQuery();
+			existe = resultado.next();
+
+		} catch (SQLException e) {
+			
 		}
 		return existe;
 	}

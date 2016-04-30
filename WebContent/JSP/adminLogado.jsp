@@ -1,3 +1,5 @@
+<%@page import="javax.websocket.SendResult"%>
+<%@page import="org.apache.catalina.ha.backend.Sender"%>
 <%@page import="com.infopower.entidades.Administrador"%>
 <%@page import="com.infopower.controladores.ControladorAdmin"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -45,7 +47,9 @@
 							if(sessao.getAttribute("adminLogado")!=null){
 								%>
 								<jsp:include page="menu.jsp" flush="true" />
-							<% }%>
+							<% }else{
+								response.sendRedirect("Usuario.jsp");
+							}%>
         </div>
         
         
@@ -70,6 +74,27 @@
 
     </div>
     <!-- /#wrapper -->
+    
+     <!-- Modal -->
+
+    <div class="modal fade"  id="myModal" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <div class ="alert-success">  <h4 class="modal-title">Cadastrado com Sucesso</h4></div>
+                </div>
+
+                <div class="modal-footer">
+                	<a href="adminLogado.jsp" class="btn btn-success btn-sm" data-dismiss="modal">OK</a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+	 <!-- Modal -->
 
     <!-- jQuery -->
     <script src="../js/jquery.js"></script>

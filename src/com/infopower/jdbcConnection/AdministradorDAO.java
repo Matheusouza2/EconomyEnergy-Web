@@ -48,7 +48,7 @@ public class AdministradorDAO implements InterfaceAdministrador {
 }
 
 	public void alterar(Administrador administrador) {
-		String sql = "UPDATE CLIENTE SET id_pessoa=?, nome=?, endereco=?, login=?, senha=?, telefone=?, cpf_cliente=? WHERE id_pessoa=?";
+		String sql = "UPDATE ADMINISTRADOR SET id_admin=?, nome=?, endereco=?, login=?, senha=?, telefone=?, cpf_cliente=? WHERE id_pessoa=?";
 
 		try {
 			preparador = con.prepareStatement(sql);

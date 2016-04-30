@@ -9,6 +9,10 @@ public class Fatura {
 	private double consumoDia;
 	private double consumoMes;
 	
+	public Fatura(){
+		
+	}
+	
 	public Fatura(int id, Date data, double consumoKw,
 			double consumoRs, double consumoDia, double consumoMes) {
 

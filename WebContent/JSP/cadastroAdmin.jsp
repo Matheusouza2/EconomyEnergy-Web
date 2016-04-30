@@ -47,7 +47,9 @@
 							if(sessao.getAttribute("adminLogado")!=null){
 								%>
 								<jsp:include page="menu.jsp" flush="true" />
-							<% }%>
+							<% }else{
+								response.sendRedirect("Usuario.jsp");
+							}%>
         </div>
         <!-- /#sidebar-wrapper -->
 
@@ -192,18 +194,7 @@
 
     </fieldset>
 </form>
-<% ControladorAdmin controladorAdmin = new ControladorAdmin();%>
-							<c:choose>
-							
-						<c:when test="${controladorAdmin != null}">
-						
-                      	<jsp:include page="cadastradoSucesso.jsp" flush="true" />
-                      	</c:when>
-						<c:otherwise>
-                      	<jsp:include page="cadastradoSucesso.jsp" flush="true" />
-                      	</c:otherwise>
-						
-					</c:choose>
+
 
 						</div>
                          

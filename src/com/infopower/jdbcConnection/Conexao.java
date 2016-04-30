@@ -37,7 +37,7 @@ public class Conexao {
 		try {
 			if (con == null) {
 				Class.forName("org.postgresql.Driver");
-				con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/infopower", "postgres", "890");
+				con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/infopower", "postgres", "123");
 				System.out.println("Conectado ao BD com SUCESSO!");
 			}
 			return con;

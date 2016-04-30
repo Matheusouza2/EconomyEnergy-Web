@@ -1,5 +1,6 @@
 package com.infopower.controladores;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import com.infopower.entidades.Cliente;
@@ -19,8 +20,15 @@ public class ControladorCliente {
 		return repositorioCliente.listar();
 	}
 	
-	public void alterar(Cliente cliente){
-		repositorioCliente.alterar(cliente);
+	public void alterar(Cliente cliente, Endereco endereco){
+		repositorioCliente.alterar(cliente, endereco);
+	}
+	
+	public Cliente procurarId(Integer id){
+		return repositorioCliente.procurar(id);
+	}
+	public List<Cliente> procurarNome(String nome){
+		return repositorioCliente.procurarNome(nome);
 	}
 	
 	public void excluir(Cliente cliente){
@@ -29,6 +37,9 @@ public class ControladorCliente {
 	
 	public Cliente autenticar(Cliente cliente){
 		return repositorioCliente.autenticar(cliente);
+	}
+	public Boolean existe(Cliente cliente) throws SQLException{
+		return repositorioCliente.Existe(cliente);
 	}
 
 }
