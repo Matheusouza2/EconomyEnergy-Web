@@ -41,7 +41,7 @@ void loop(){
    potencia = ampers*220.0;         //Calculo de potencia (potencia = ampers * voltagem)
    kw = (((potencia)/1000.0) * 1.0/3600.0); //Calculo do kw
   
-  enviarServlet(ampers,  potencia, kw); // chama o metodo de envio de dados pro servlet
+  enviarServlet(kw); // chama o metodo de envio de dados pro servlet
   
   if(cliente){
     boolean continua = true;
@@ -80,18 +80,14 @@ void loop(){
   }
 }
 
-void enviarServlet(double ampers, double potencia, double kw){
+void enviarServlet(double kw){
  EthernetClient clienteServlet; //instancia um cliente para envio de dados via requisição GET para o servlet
   
   clienteServlet.connect("192.168.0.110",9091);// define o ip e porta ao qual vai ser enviada a requisição
   
   if (clienteServlet.connected()) { //se o server encontrar o ip e a porta livre ele envia a requisição.
     clienteServlet.print("GET /InfoPower/ArduinoServlet?");
-    clienteServlet.print("ampers=");
-    clienteServlet.print(ampers);
-    clienteServlet.print("&potencia=");
-    clienteServlet.print(potencia);
-    clienteServlet.print("&kw=");
+    clienteServlet.print("kw=");
     clienteServlet.print(kw,DEC);
     clienteServlet.println(" HTTP/1.1");
     clienteServlet.println("Host: 192.168.0.110");

@@ -23,9 +23,7 @@ public class ArduinoServlet extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		double ampers = Double.parseDouble(request.getParameter("ampers"));
 		double kw = Double.parseDouble(request.getParameter("kw"));
-		double potencia = Double.parseDouble(request.getParameter("potencia"));
 		
 		hora = new GregorianCalendar();
 		
