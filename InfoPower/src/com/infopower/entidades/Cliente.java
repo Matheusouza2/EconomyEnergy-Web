@@ -2,17 +2,20 @@
 package com.infopower.entidades;
 
 public class Cliente extends Pessoa{
-
-	public Cliente(String nome, String login, String senha, Endereco endereco, String telefone) {
+	
+	private int id;
+	private String cpf;
+	
+	public Cliente(String nome, String cpf, String login, String senha, Endereco endereco, String telefone) {
 		//Utilização da herança
 		super(nome,login,senha,endereco,telefone);
+
+		this.cpf = cpf;
 	}
+	
 	public Cliente(){
 		super();
 	}
-
-	private int id;
-	private int cpf;
 
 	public int getId() {
 		return id;
@@ -20,10 +23,13 @@ public class Cliente extends Pessoa{
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getCpf() {
+
+	public String getCpf() {
 		return cpf;
 	}
-	public void setCpf(int cpf) {
+
+	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
+	
 }

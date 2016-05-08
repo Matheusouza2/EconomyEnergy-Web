@@ -12,9 +12,9 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-/*
+
 import com.infopower.entidades.Administrador;
-@WebFilter(filterName = "FiltroAutentica", urlPatterns = {"/*"})
+@WebFilter(dispatcherTypes = {DispatcherType.REQUEST, DispatcherType.FORWARD }, urlPatterns = {"/JSP/*"})
 
 public class FiltroAutentica implements Filter {
 	private String contextPath;
@@ -28,20 +28,17 @@ public class FiltroAutentica implements Filter {
             ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {
- 
-        HttpServletResponse res = (HttpServletResponse) response;
-        HttpServletRequest req = (HttpServletRequest) request;
-        HttpSession session = req.getSession();
- 
-        Administrador u = (Administrador) session.getAttribute("FiltroAutentica");
-        if (u == null) {
-            session.invalidate();
-            res.sendRedirect(contextPath + "index.jsp");
+    	
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        String url = httpServletRequest .getRequestURI();
+        //capturando sessao
+        HttpSession sessao = httpServletRequest .getSession();
+      //estar logado?
+        if (sessao.getAttribute("adminLogado")!=null || url.contains("index.jsp") || url.contains("AutenticadorAdministrador2")
+        		|| sessao.getAttribute("clienteLogado")!=null ) {
+            chain.doFilter(request, response); //Permite o fluxo
         } else {
-            res.setHeader("Cache-control", "no-cache, no-store");
-            res.setHeader("Pragma", "no-cache");
-            res.setHeader("Expires", "-1");
-            chain.doFilter(request, response);
+            ((HttpServletResponse) response).sendRedirect("../index.jsp");
         }
     }
     @Override
@@ -56,4 +53,3 @@ public class FiltroAutentica implements Filter {
 
 
 }
-*/

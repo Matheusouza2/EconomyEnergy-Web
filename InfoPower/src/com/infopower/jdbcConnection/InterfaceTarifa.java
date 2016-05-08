@@ -11,5 +11,6 @@ public interface InterfaceTarifa {
 	public void excluir (Tarifa tarifa);
 	public List<Tarifa> listar();
 	public Boolean Existe(Tarifa tarifa);
+	public Tarifa procurar(Integer id);
 
 }

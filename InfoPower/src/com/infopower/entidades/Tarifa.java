@@ -5,9 +5,8 @@ public class Tarifa {
 	private int idTarifa;
 	private String nome;
 	private double valor;
-	public Tarifa(int idTarifa, String nome, double valor) {
+	public Tarifa( String nome, double valor) {
 		super();
-		this.idTarifa = idTarifa;
 		this.nome = nome;
 		this.valor = valor;
 	}

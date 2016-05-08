@@ -1,188 +1,149 @@
+<%@page import="javax.websocket.SendResult"%>
+<%@page import="org.apache.catalina.ha.backend.Sender"%>
+<%@page import="com.infopower.entidades.Administrador"%>
+<%@page import="com.infopower.controladores.ControladorAdmin"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-    <%@ page import="com.infopower.entidades.Cliente"%>
+	pageEncoding="ISO-8859-1"%>
+<%@ page import="com.infopower.entidades.Cliente"%>
 <%@ page import="java.util.List"%>
-<%
-	String user = (String) request.getParameter("admin");
-%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
- <meta charset="utf-8">
-        <title>Economy Energy</title>
-        <meta name="description" content="">
-<!--
-Travel Template criado por
-http://www.templatemo.com/tm-409-travel
 
-e Modificado para estudos academicos : InfoPower
--->
-        <meta name="viewport" content="width=device-width">
-		<meta name="author" content="A-Team">
-        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,800,700,600,300' rel='stylesheet' type='text/css'>
-        
-        <link rel="stylesheet" href="css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/font-awesome.css">
-        <link rel="stylesheet" href="css/animate.css">
-        <link rel="stylesheet" href="css/templatemo_misc.css">
-        <link rel="stylesheet" href="css/templatemo_style.css">
-        <link rel="stylesheet" href="css/estilo.css">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-        <script src="js/vendor/modernizr-2.6.1-respond-1.1.0.min.js"></script>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <title>Painel Administrador</title>
+
+     <!-- Bootstrap Core CSS -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+
+	<link rel="stylesheet" href="../css/style.css">
+
+  
+  <!-- BOOTSTRAP STYLES-->
+    <link href="../css/bootstrap.css" rel="stylesheet" />
+     <!-- FONTAWESOME STYLES-->
+    <link href="../font-awesome/css/font-awesome.css" rel="stylesheet" />
+        <!-- CUSTOM STYLES-->
+    <link href="../css/custom.css" rel="stylesheet" />
+     <!-- GOOGLE FONTS-->
+   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
 </head>
+
 <body>
-<!--[caso for IE 7]>
-            <p class="chromeframe">Você esta usando um navegador desatualizado. <a href="http://google.com/">Atualize seu browser agora</a> ou <a href="http://www.google.com/chromeframe/?redirect=true">instale Google Chrome Frame</a> Para uma melhor experiência no nosso site.</p>
-        <![endif]-->
 
-   
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+         <div id="sidebar-wrapper">
+            <%HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+							HttpSession sessao = httpServletRequest .getSession();
+							if(sessao.getAttribute("adminLogado")!=null){
+								%>
+								<jsp:include page="menu.jsp" flush="true" />
+							<% }else{
+								response.sendRedirect("Usuario.jsp");
+							}%>
+        </div>
+        
+        <div id="clientes" class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+                      <div class="div-square">
+                           <a href="#" >
+ <i class="fa fa-users fa-5x"></i>
+                      <h4>Clientes</h4>
+                      </a>
+                      </div>
+                     
+                     
+                  </div>
+                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+                      <div class="div-square">
+                           <a href="#" >
+ <i class="fa fa-key fa-5x"></i>
+                      <h4>Admins</h4>
+                      </a>
+                      </div>
+                     
+                     
+                  </div>
+                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+                      <div class="div-square">
+                           <a href="#" >
+ <i class="fa fa-list-alt fa-5x"></i>
+                      <h4>Tarifas</h4>
+                      </a>
+                      </div>
+                     
+                
+             </div>
+
+<div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+                      <div class="div-square">
+                           <a href="https://github.com/InfoPower-tec/Economy-Energy" >
+ <i class="fa fa-github fa-5x"></i>
+                      <h4>GitHub</h4>
+                      </a>
+                      </div>
+                     
+                     
+                  </div>
+                  
 
 
-        <!--logo da empresa local superior lado esquerdo do site -->
-        <div class="site-header">
-            <div class="container">
-                <div class="main-header">
-                    <div class="row">
-                        <div class="col-md-4 col-sm-6 col-xs-10">
-
-                        </div> <!-- /.col-md-4 -->
-
-                        <!--menu de botoes do site -->
-
-                        <div class="col-md-8 col-sm-6 col-xs-2">
-                            <div class="main-menu">
-                                
-                      <!--  login Modal usuário-->
-                       <div align="right">
-                     <h6>Bem Vindo <% out.print(user); %>!</h6>
-					</div>
-                                <a href="index.jsp">Logof</a>
-
-                                
-                                <div class="container">
-								<form action="/InfoPower/admControle" method="post"
-									accept-charset="utf-8" class="form-login">
-									<button value="cadastrar" type="submit" class="btn btn-primary" name="cadastro">Cadastrar Administrador</button>
-									<button value="cadastrarCliente" type="submit" class="btn btn-primary" name="cadastro">Cadastrar Cliente</button>
-									<button value="cadastrarTarifa" type="submit" class="btn btn-primary" name="cadastro">Cadastrar Tarifa</button>
-									<button value="listarCliente" type="submit" class="btn btn-primary" name="cadastro">Listar Cliente</button>
-									<button value="listarAdm" type="submit" class="btn btn-primary" name="cadastro">Listar Administrador</button>
-								</form>
-
-							</div>
-
-                                     <!---------------------- fim login modal administrador--------------------------------------->
-
-
-                                <a href="#" class="toggle-menu visible-sm visible-xs">
-                                    <i class="fa fa-bars"></i>
-                                </a>
-                                <ul class="visible-lg visible-md">
-                                    <li class="active"><a href="index.jsp">Inicio</a></li>
-                                    <li><a href="sobre.html">sobre</a></li>
-                                    <li><a href="contato.html">Contato</a></li>
-
-                                </ul>
-                            </div> <!-- /menu principal-->
-                        </div> <!-- /.col-md-8 -->
-                    </div> <!-- /.row -->
-                </div> <!-- /Cabeçalho Principal -->
+<div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+                      <div class="div-square">
+                           <a href="#" >
+ <i class="fa fa-sign-out fa-5x"></i>
+                      <h4>Logout</h4>
+                      </a>
+                      </div>
+                     
+                     
+                  </div>
+                  
+                 
+                 
+                 <div class="row bootstrap-admin-no-edges-padding">
+        <div class="col-md-10">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="text-muted bootstrap-admin-box-title"> Economy Energy</div>
+                </div>
+                <div class="bootstrap-admin-panel-content">
+                    <p> InfoPower</p>
+                    <p> Copyright © 2016 - <a href="https://github.com/InfoPower-tec/Economy-Energy">Git Economy Energy</a></p>
+                    <p>O software desenvolvido tem por finalidade ajudar as pessoas á ter um controle melhor em seu consumo de energia. O código do Economy Energy está disponivel para estudos academicos, Acesse o GitHub de nossa empresa para download de versões atualizadas.</p>
+                    <p>Infopower Tecnology.</p>
                    
+                </div>
+            </div>
+        </div>
+</div>
 
-            </div> <!-- /.recipiente -->
-        </div> <!-- /.site cabeçalho -->
+	 <!-- Modal -->
 
+    <!-- jQuery -->
+    <script src="../js/jquery.js"></script>
 
-        <div class="flexslider">
-            <ul class="slides">
-                <li>
-                    <div class="overlay"></div>
-                    <img src="images/energy.jpg" alt="Special 1"/>
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-5 col-lg-4">
-                                <div class="flex-caption visible-lg">
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../js/bootstrap.min.js"></script>
 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="overlay"></div>
-                    <img src="images/imagem2.gif" alt="Special 2">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-5 col-lg-4">
-                                <div class="flex-caption visible-lg">
-
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="overlay"></div>
-                    <img src="images/Energia.jpg" alt="Special 3">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-5 col-lg-4">
-                                <div class="flex-caption visible-lg">
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-            </ul>
-        </div> <!-- /.Slider -->
-
-
-
-
-
-		<div class="middle-content"></div>
-
-        <div class="site-footer">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-4 col-sm-4">
-                        <div class="footer-logo">
-                            <a href="inicio.html">
-                                <img src="images/IMAGEM.jpg" alt="">
-                            </a>
-                        </div>
-                    </div> <!-- /.col-md-4 -->
-                    <div class="col-md-4 col-sm-4">
-                        <div class="copyright">
-                            <span>
-                                Desenvolvido Por &copy; 2016 <a href="#">InfoPower</a>
-                            
-
-                            
-                            </span>
-                        </div>
-                    </div> <!-- /.col-md-4 -->
-                    <div class="col-md-4 col-sm-4">
-                        <ul class="social-icons">
-                            <li><a href="#" class="fa fa-facebook"></a></li>
-                            <li><a href="#" class="fa fa-twitter"></a></li>
-
-                        </ul>
-                    </div> <!-- /.col-md-4 -->
-                </div> <!-- /.row -->
-            </div> <!-- /.container -->
-        </div> <!-- /.site-footer -->
-
-        <script src="js/vendor/jquery-1.11.0.min.js"></script>
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.0.min.js"><\/script>')</script>
-        <script src="js/bootstrap.js"></script>
-        <script src="js/plugins.js"></script>
-        <script src="js/main.js"></script>
-        <!-- templatemo 409 travel -->  
+    <!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
 
 </body>
+
 </html>

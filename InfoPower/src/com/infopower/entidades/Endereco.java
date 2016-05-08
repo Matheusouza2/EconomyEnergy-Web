@@ -2,23 +2,20 @@ package com.infopower.entidades;
 
 public class Endereco {
 	
-	private int id;
 	private String logradouro;
 	private int numero;
 	private String bairro;
 	private String cidade;
-	private int cep;
+	private String cep;
 	private String estado;
 	private String pais;
 
 	public Endereco() {
-		// TODO Auto-generated constructor stub
 	}
 
-	public Endereco(int id, String logradouro, int numero, String bairro, String cidade, int cep, String estado,
+	public Endereco(String logradouro, int numero, String bairro, String cidade, String cep, String estado,
 			String pais) {
 		super();
-		this.id = id;
 		this.logradouro = logradouro;
 		this.numero = numero;
 		this.bairro = bairro;
@@ -26,14 +23,6 @@ public class Endereco {
 		this.cep = cep;
 		this.estado = estado;
 		this.pais = pais;
-	}
-
-	public int getId(int i) {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public String getLogradouro() {
@@ -68,11 +57,11 @@ public class Endereco {
 		this.cidade = cidade;
 	}
 
-	public int getCep() {
+	public String getCep() {
 		return cep;
 	}
 
-	public void setCep(int cep) {
+	public void setCep(String cep) {
 		this.cep = cep;
 	}
 
