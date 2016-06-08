@@ -1,7 +1,7 @@
 package com.infopower.servlets;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,13 +34,21 @@ public class AutenticadorCliente extends HttpServlet {
 		Cliente cliente = new Cliente();
 		cliente.setLogin(login);
 		cliente.setSenha(senha);
+
+		//criançao sessao
+		HttpSession session =  request.getSession();
 		
 		ControladorCliente clienteControler = new ControladorCliente();
-		Cliente clienteRetorno = clienteControler.autenticar(cliente);
+		Cliente clienteRetorno = null;
+		try {
+			clienteRetorno = clienteControler.autenticar(cliente);
+		} catch (SQLException e) {
+			session.setAttribute("mensagem", "erro-banco");
+			session.setAttribute("erro", e.getMessage());
+			response.sendRedirect("index.jsp");
+		}
 		
 		if(clienteRetorno!=null){
-			//criançao sessao
-			HttpSession session =  request.getSession();
 			session.setAttribute("clienteLogado", clienteRetorno);
 			
 			// vamos obter o valor do timeout da sessão
@@ -50,7 +58,8 @@ public class AutenticadorCliente extends HttpServlet {
 			//encaminhando ao index
 			response.sendRedirect("JSP/Usuario.jsp");
 		}else{
-			response.sendRedirect("naoLogado.html");
+			session.setAttribute("mensagem", "erro");
+			response.sendRedirect("index.jsp");
 			
 		}	
 	}

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b3f5e36a-a07e-4717-8de9-360fa915f7bb">
+	<property name="template.type" value="columnar"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#000000" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="idFatura" class="java.lang.String"/>
+	<parameter name="dataFatura" class="java.lang.String"/>
+	<parameter name="consumoDia" class="java.lang.String"/>
+	<parameter name="consumoReal" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="132" splitType="Stretch">
+			<image>
+				<reportElement x="58" y="0" width="431" height="106" uuid="7f9c97c8-3cfd-42bf-ac94-41ae2d39522f"/>
+				<imageExpression><![CDATA["C:/Users/Mathe/OneDrive/Documentos/workspaceEE/InfoPower/WebContent/relatorio/head_fatura.jpg"]]></imageExpression>
+			</image>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="4" y="105" width="551" height="1" uuid="e5850c58-8037-4eb5-9c1a-d7f38b458052"/>
+			</line>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="392" splitType="Stretch">
+			<rectangle>
+				<reportElement x="5" y="96" width="544" height="287" uuid="fbd01769-691b-4c95-b012-8352409eedad"/>
+			</rectangle>
+			<image>
+				<reportElement x="195" y="124" width="152" height="256" uuid="b855d6aa-5e23-4d3b-a72b-d9d9c47ab20a"/>
+				<imageExpression><![CDATA["C:/Users/Mathe/OneDrive/Documentos/workspaceEE/InfoPower/WebContent/relatorio/logo_marca.jpg"]]></imageExpression>
+			</image>
+			<rectangle>
+				<reportElement x="37" y="124" width="100" height="20" uuid="41c12df5-a1ea-40d9-aef9-72d6b8fbcc3b"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="233" y="124" width="100" height="20" uuid="769720fe-e773-4c83-8562-95813408905b"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="434" y="124" width="100" height="20" uuid="5f129e0a-efe9-4dbd-a2b0-b5e789cd7595"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="196" y="31" width="161" height="35" uuid="799b77f9-03c7-47e9-9e9d-416cb533dbab"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial Black" size="20"/>
+				</textElement>
+				<text><![CDATA[Fatura Diária]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="37" y="104" width="100" height="20" uuid="6818e2a0-290f-4306-9f94-a9aaa5276755"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Nº. Fatura]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="434" y="104" width="100" height="20" uuid="af694b0d-6463-4289-bd23-b3dc6fb923f6"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Consumo Dia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="233" y="104" width="100" height="20" uuid="ecb53a54-a92c-4a28-aaa7-e71204f58877"/>
+				<textElement textAlignment="Left">
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[Data]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="40" y="124" width="100" height="20" uuid="38e65892-3828-492a-93dc-26d51ab6b113"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{idFatura}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="237" y="124" width="100" height="20" uuid="1edba771-83cc-40c0-84a8-dde7855499ad"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{dataFatura}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="6" y="229" width="542" height="1" uuid="777a4871-82c3-4608-a3d6-3fee264ebbf5"/>
+			</line>
+			<textField>
+				<reportElement x="438" y="124" width="100" height="20" uuid="bdccd722-2297-4e02-897c-e16ffb8edb80"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{consumoDia}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="208" y="285" width="148" height="32" uuid="336b7188-709e-4a2f-a33b-41f71cd60c58"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="208" y="261" width="139" height="23" uuid="c3a17886-f948-4b1f-a2d9-d4ed45889e7d"/>
+				<textElement>
+					<font size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total da Fatura]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="213" y="286" width="32" height="31" uuid="be972593-ddc5-49c5-9a7d-795f914a95b9"/>
+				<textElement>
+					<font size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[R$:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="247" y="286" width="109" height="31" uuid="2de288a5-a800-4f16-b247-e53d4b80bd78"/>
+				<textElement>
+					<font size="18" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{consumoReal}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="126" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="3" width="555" height="1" uuid="a9713185-7c7b-4a7f-b256-be85ed6bd5eb"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="31" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="2" y="0" width="555" height="31" forecolor="#D0B48E" backcolor="#9DB1B8" uuid="7ae277e8-0402-43a8-9cd4-5a5465cf4859"/>
+				<staticText>
+					<reportElement x="173" y="11" width="259" height="20" uuid="0f2e1e5e-2270-45c3-abc5-74cb58f8b682"/>
+					<text><![CDATA[Copyright ©InfoPower 2016. Todos os direitos reservado]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

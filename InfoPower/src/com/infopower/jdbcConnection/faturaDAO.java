@@ -33,10 +33,10 @@ public class faturaDAO implements InterfaceFatura{
 	}
 
 	@Override
-	public List<Fatura> listar() {
+	public List<Fatura> listar() throws SQLException{
 		String sql = "SELECT * FROM FATURA";
 		List<Fatura> faturas = new ArrayList<Fatura>();
-		try {
+		
 			PreparedStatement preparador = con.prepareStatement(sql);
 
 			ResultSet resultado = preparador.executeQuery();
@@ -48,7 +48,6 @@ public class faturaDAO implements InterfaceFatura{
 				fatura.setData(resultado.getString("data_fatura"));
 				fatura.setConsumoDia(resultado.getDouble("consumo_dia"));
 				fatura.setConsumoMes(resultado.getDouble("consumo_mes"));
-				fatura.setConsumoKw(resultado.getDouble("consumo_kw"));
 				fatura.setConsumoRs(resultado.getDouble("consumo_reais"));
 				faturas.add(fatura);
 			
@@ -56,12 +55,7 @@ public class faturaDAO implements InterfaceFatura{
 
 			preparador.close();
 
-			//System.out.println("Lista Apresentada");
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-		}
-		return faturas;
+			return faturas;
 	}
 
 	@Override

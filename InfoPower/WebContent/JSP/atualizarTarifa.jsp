@@ -142,7 +142,41 @@ Tarifa tarifa = controletarifa.procurarId(id);
     });
     </script>
 
+<div class="alert-danger">
+					<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+					  <div class="modal-dialog" role="document">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
+					       <div class="alert-danger"><h4 class="modal-title" id="titulo-modal"><h4></div>
+					      </div>
+					      <div class="modal-body" id="mensagem-modal">
+					      </div>
+					      <div class="modal-footer">
+					      <button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
+					      </div>
+					    </div>
+					  </div>
+					</div>
+				</div>
+				 <!-- /.modal -->
 </body>
 
-</html>
+<% 
+if(session.getAttribute("mensagem") != null){
+	
+	 if(sessao.getAttribute("mensagem").equals("erro-banco")){
+		String erro = (String) sessao.getAttribute("erro");
+		%>
+		<script type="text/javascript">
+		$('#titulo-modal').text('Erro Tecnico');
+		$('#mensagem-modal').text("<%=erro%>");
+		$("#modal").modal('show');
+		</script>
+	<%
+	sessao.setAttribute("mensagem", null);			
+	}
+	
+}%>
 
+</html>

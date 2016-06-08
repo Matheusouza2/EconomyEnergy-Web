@@ -95,6 +95,7 @@
 
 @media(min-width:768px) {
     #wrapper {
+    	width: 100%;
         padding-left: 250px;
     
     }
@@ -141,4 +142,14 @@
 	font-weight: bold;
 }
 
+.panel{
+position:relative;
+ top: 50px;	
+ width:95%;
+ left: 10px;
+	
+}
+	
+	
+	
 	

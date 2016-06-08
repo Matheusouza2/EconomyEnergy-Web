@@ -1,8 +1,7 @@
 package com.infopower.servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
+import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,6 +16,8 @@ import com.infopower.criptografia.Criptografia;
 import com.infopower.entidades.Cliente;
 import com.infopower.entidades.Endereco;
 import com.infopower.exception.ClienteExisteException;
+import com.infopower.exception.CpfExistenteException;
+import com.infopower.exception.EnderecoExistenteException;
 import com.infopower.jdbcConnection.ClienteDAO;
 
 @WebServlet("/ClienteServlet")
@@ -33,14 +34,23 @@ public class CadastroClienteServlet extends HttpServlet {
 		String acao = request.getParameter("acao");
 		ClienteDAO clienteDao = new ClienteDAO();
 		
+		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+		HttpSession sessao = httpServletRequest.getSession();
 		if(acao != null && acao.equals("exc")){
 			
 			int id = Integer.parseInt(request.getParameter("id"));
 			
 			Cliente cliente = new Cliente();
 			cliente.setId(id);
-			clienteDao.excluir(cliente);
+			try {
+				clienteDao.excluir(cliente);
+			} catch (SQLException e) {
+				sessao.setAttribute("mensagem", "erro-banco");
+				sessao.setAttribute("erro", e.getMessage());
+				response.sendRedirect("JSP/listaCliente.jsp");
+			}
 			
+			sessao.setAttribute("mensagem", "sucesso-excluir");
 			response.sendRedirect("JSP/listaCliente.jsp");
 		}
 		if(acao != null && acao.equals("alt")){
@@ -48,7 +58,13 @@ public class CadastroClienteServlet extends HttpServlet {
 			String id = request.getParameter("id");
 			
 			Cliente cliente = new Cliente();
-			cliente = clienteDao.procurar(Integer.parseInt(id));
+			try {
+				cliente = clienteDao.procurar(Integer.parseInt(id));
+			} catch (NumberFormatException | SQLException e) {
+				sessao.setAttribute("mensagem", "erro-banco");
+				sessao.setAttribute("erro", e.getMessage());
+				response.sendRedirect("JSP/atualizarCliente.jsp");
+			}
 			request.setAttribute("cliente", cliente);
 			RequestDispatcher saida = request.getRequestDispatcher("JSP/atualizarCliente.jsp");
 			saida.forward(request, response);
@@ -57,11 +73,14 @@ public class CadastroClienteServlet extends HttpServlet {
 		
 		
 		
-	}
+	}//Fim do metodo doGet
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String acao = request.getParameter("acao");
+		
+		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+		HttpSession sessao = httpServletRequest.getSession();
 		
 		if(acao != null && acao.equals("salv")){
 			
@@ -83,32 +102,31 @@ public class CadastroClienteServlet extends HttpServlet {
 			Endereco endereco = new Endereco(logradouro, numero, bairro, cidade, cep, estado, pais);
 			Cliente cliente = new Cliente(nome, cpf, login, senha, endereco, telefone);
 			
-		
-			//pede para ControladorCliente cadastrar no banco de dados
-			
+			//instancia o controlador 
 			ControladorCliente clienteControler = new ControladorCliente();
 			
 				try {
+					//pede pro controlador cadastrar no banco
 					clienteControler.cadastar(cliente,endereco);
+					sessao.setAttribute("mensagem", "sucesso");
+					response.sendRedirect("JSP/cadastroCliente.jsp");
 				} catch (ClienteExisteException e) {
-					
-					System.out.println(e.getMessage());
-					
-					RequestDispatcher saida = request.getRequestDispatcher("JSP/naoLogado.jsp");
-					saida.forward(request, response);
+					sessao.setAttribute("mensagem", "erro-cadastro");
+					response.sendRedirect("JSP/cadastroCliente.jsp");
+				}catch (EnderecoExistenteException e) {
+					sessao.setAttribute("mensagem", "erro-endereço");
+					response.sendRedirect("JSP/cadastroCliente.jsp");
+				}catch (CpfExistenteException e) {
+					sessao.setAttribute("mensagem", "erro-cpf");
+					response.sendRedirect("JSP/cadastroCliente.jsp");
+				}catch (SQLException e) {
+					sessao.setAttribute("mensagem", "erro-banco");
+					sessao.setAttribute("erro", e.getMessage());
+					response.sendRedirect("JSP/cadastroCliente.jsp");
 				}
 				request.setAttribute("cliente", cliente);
-				
-				request.setAttribute("mensagem", "Post salvo com sucesso!");
-				
-			    String site = new String("JSP/cadastroCliente.jsp");
-
-			     response.setStatus(response.SC_MOVED_TEMPORARILY);
-			     response.setHeader("Location", site);
-			
-			 
-			
-		}
+				}//fim do if cadastrar
+		
 		if(acao != null && acao.equals("alt")){
 			
 			int id = Integer.parseInt(request.getParameter("id_cliente"));
@@ -132,13 +150,17 @@ public class CadastroClienteServlet extends HttpServlet {
 			//pede para ControladorCliente cadastrar no banco de dados
 			
 			ControladorCliente clienteControler = new ControladorCliente();
-			clienteControler.alterar(cliente, endereco);
+			try {
+				clienteControler.alterar(cliente, endereco);
+				sessao.setAttribute("mensagem", "sucesso-atualiza");
+				response.sendRedirect("JSP/listaCliente.jsp");
+			} catch (SQLException e) {
+				sessao.setAttribute("mensagem", "erro-banco");
+				sessao.setAttribute("erro", e.getMessage());
+				response.sendRedirect("JSP/atualizaCliente.jsp");
+			}
 			
-		      String site = new String("JSP/listaCliente.jsp");
-
-		      response.setStatus(response.SC_MOVED_TEMPORARILY);
-		      response.setHeader("Location", site);
+			
 		}
-		 
-	}
-}
+	}//fim do metodo doPost 
+}//Fim da classe

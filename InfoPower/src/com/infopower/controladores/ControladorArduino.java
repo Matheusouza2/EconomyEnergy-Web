@@ -1,48 +1,47 @@
 package com.infopower.controladores;
 
 import java.io.IOException;
+
 import java.sql.SQLException;
 
-import javax.swing.JOptionPane;
-
+import com.infopower.entidades.Tarifa;
 import com.infopower.jdbcConnection.ArduinoDAO;
 import com.infopower.jdbcConnection.InterfaceArduino;
+import com.infopower.jdbcConnection.TarifaDAO;
 
 public class ControladorArduino {
 
 	private InterfaceArduino arduino = new ArduinoDAO();
-	
+	private TarifaDAO tarifa = new TarifaDAO();
 	public ControladorArduino() {
 	
 	}
 	
-	public void cadastrar(double kw, String data) throws SQLException{
-		try {
+	public void cadastrar(double kw, String data) throws SQLException, IOException{
 			arduino.cadastrar(kw, data);
 			
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro no Arquivo",JOptionPane.ERROR_MESSAGE);
-			}
-		cadastrarJDBC();
+			cadastrarJDBC();
 	}
 	
-	private double somatoriaDiaria(){
+	private double somatoriaDiaria() throws IOException{
 		
 		double somatorio = 0;
 		
-		try {
 		
 			for(double soma : arduino.somatoriaDiaria()){
 				somatorio += soma; 
 			}	
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro no Arquivo",JOptionPane.ERROR_MESSAGE);
-		}
 		return somatorio;
 	}
 	
-	public void cadastrarJDBC() throws SQLException{
-		double valor = somatoriaDiaria() * 0.003875;
-		arduino.cadastrarJDBC(somatoriaDiaria(), valor);
+	public void cadastrarJDBC() throws SQLException, IOException{
+		double valor = 0;
+		for (Tarifa tarifaT: tarifa.listar()) {
+			if(tarifaT.getNome().equals("preço kw")){
+				valor = tarifaT.getValor();
+			}
+		}
+		double valorCadastra = somatoriaDiaria() * valor;
+		arduino.cadastrarJDBC(somatoriaDiaria(), valorCadastra);
 	}
 }

@@ -13,19 +13,15 @@
     <meta name="author" content="">
 
     <title>Painel Administrador</title>
+	
+	<link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
 
-    <!-- Bootstrap Core CSS -->
     <link href="../css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
     <link href="../css/admin.css" rel="stylesheet">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    <script src="../js/jquery.js"></script>
+    <script src="../js/validator.js"></script>
+    <link href="../css/estilocadastro/css" rel="stylesheet">
 
 </head>
 
@@ -51,33 +47,34 @@
                     <div class="col-lg-12">
                         <h1>Cadastrar Tarifa</h1><br/>
                                               
-                        <h5 style="overflow:auto; color: red; " >(*) Preenchimento Obrigatório !</h5><br/>
+                        <h5 style="overflow:auto; color: red; " >Todos os Campos São Obrigatórios !</h5><br/>
                         
                         <!-------------------FORMULARIO  usuario -------------------------->
 
 <div class="col-md-6 col-sm-5">
 
 
-<form name="cadastro" class="form-horizontal" action="/InfoPower/TarifaControle?acao=salv" method="post" onsubmit="return ValNumber()">
+<form name="cadastro" class="form-horizontal" action="/InfoPower/TarifaControle?acao=salv" method="post" data-toggle="validator">
     <fieldset>
             <!-- NOME input-->
               
-            <div class="form-group" align="center">
-                <label  class="col-md-4 control-label" for="textinput1">Nome Tarifa *</label>
+            <div class="form-group has-feedback" align="center">
+                <label  class="col-md-4 control-label" for="textinput1">Nome Tarifa</label>
                 <div class="col-md-8">
 
-                    <input autofocus="autofocus"  id="nomeTarifa" name="nomeTarifa" type="text" placeholder="Tarifa" class="form-control input-md">
-
-                </div>
+                    <input autofocus="autofocus"  id="nomeTarifa" name="nomeTarifa" required type="text" placeholder="Tarifa" class="form-control input-md">
+					<span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                </div><div class="help-block with-errors" style="float: right; padding-right: 160px;"></div>
             </div>
 
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="logininput">Valor *</label>
+            <div class="form-group has-feedback">
+                <label class="col-md-4 control-label" for="logininput">Valor</label>
                 <div class="col-md-8">
 
-                    <input id="valorTarifa" name="valorTarifa" step="0.01" type="number" placeholder="Valor" class="form-control input-md">
-
-                </div>
+                    <input id="valorTarifa" name="valorTarifa" required step="0.01" type="text" pattern="^[,0-9]{2,}" placeholder="Valor" class="form-control input-md">
+					<span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                </div><div class="help-block with-errors" style="float: right; padding-right: 160px;"></div>
+                
             </div>
             
             <!-- Button (Double) -->
@@ -88,8 +85,9 @@
                   
                     <button type="reset" id="button4id" name="button2id" class="btn btn-danger"><i class="fa fa-times"></i> Cancelar</button>
                 </div>
+                <span style="color: green"><i class="fa fa-1x fa-info-circle"></i> Separe as casas decimais com virgula</span>
             </div>
-
+	
     </fieldset>
 </form>
 
@@ -98,27 +96,6 @@
 
     </fieldset>
 </form>
-
-<!-- MODAL SUCESSO -->
-
-<div class="modal fade"  id="myModal" role="dialog">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <div class ="alert-success">  <h4 id="modalNome" class="modal-title"></h4></div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success btn-sm" data-dismiss="modal">Sair</button>
-
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
        <!-------------------FORMULARIO -------------------------->
 
         </div>
@@ -141,52 +118,6 @@
     <script src="../js/bootstrap.min.js"></script>
 
     <!-- Menu Toggle Script -->
-    
-		<script type="text/javascript">
- 
-function validaForm(){
-           d = document.cadastro;
-           
-           //validar nome
-           if (d.nomeTarifa.value == ""){
-        	  		 $("#myModal").modal({backdrop:"static"});
-        	  		 $("#myModal").modal();
-        	  		 $("#modalNome").text("O campo NOME  deve ser preenchido!");
-                     d.nomeTarifa.style.backgroundColor="#E9967A";
-                     d.nomeTarifa.style.color="#ffffff";
-                     d.nomeTarifa.focus();
-                     return false;
-           }
-           //validar EMAIL
-            if (d.valorTarifa.value == ""){
-            		$("#myModal").modal({backdrop:"static"});
-   	  		 		$("#myModal").modal();
-   	  				$("#modalNome").text("O campo VALOR  deve ser preenchido!");
-                   d.valorTarifa.style.backgroundColor="#E9967A";
-                   d.valorTarifa.style.color="#ffffff";
-                   d.valorTarifa.focus();
-                   return false;
-         }
-            var regEx = /^\d{1,5}\.\d{1,5}$/;
-            //var regEx = /^\d{2}\.\d{2}$/;
-            bValid = document.cadastro.valorTarifa.value.match(regEx);
-            if(!bValid){
-            	$("#myModal").modal({backdrop:"static"});
-	  		 	$("#myModal").modal();
-	  			$("#modalNome").text("TIPO INVÁLIDO!");
-              return false;         
-            }
-            else{
-            	
-            	return true;
-            }
-        
-document.cadastro.submit();
-         
-}
-  
- </script>
-	   
     <script>
     $("#menu-toggle").click(function(e) {
         e.preventDefault();
@@ -194,7 +125,81 @@ document.cadastro.submit();
     });
     </script>
 
+<!-- Modal -->
+				<div class="alert-success">
+					<div class="modal fade" id="modal-sucesso" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+					  <div class="modal-dialog" role="document">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
+					       <div class="alert-success"><h4 class="modal-title" id="modalLabel">Operação realizada com sucesso<h4></div>
+					      </div>
+					      <div class="modal-body">
+					        Tarifa cadastrada com sucesso
+					      </div>
+						<div class="modal-footer">
+					    	  <button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
+					      </div>
+					    </div>
+					  </div>
+					</div>
+				</div>
+				 <!-- /.modal -->
+				 
+				<!-- Modal -->
+				<div class="alert-danger">
+					<div class="modal fade" id="modal-erro" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+					  <div class="modal-dialog" role="document">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
+					       <div class="alert-danger"><h4 class="modal-title" id="titulo-erro"><h4></div>
+					      </div>
+					      <div class="modal-body" id="mensagem-erro">
+					      </div>
+					      <div class="modal-footer">
+					      <button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
+					      </div>
+					    </div>
+					  </div>
+					</div>
+				</div>
+				 <!-- /.modal --> 
 </body>
 
-</html>
+<% 
+if(sessao.getAttribute("mensagem") != null){
+	
+if(sessao.getAttribute("mensagem").equals("erro-existe")){
+	%>
+	<script type="text/javascript">
+		$('#titulo-erro').text('Erro ao cadastrar tarifa');
+		$('#mensagem-erro').text('Esta tarifa já está cadastrada !');
+		$("#modal-erro").modal('show');
+	</script>
+<%
+sessao.setAttribute("mensagem", null);
+	}//fim do if erro de login
+	
+	else if(sessao.getAttribute("mensagem").equals("erro-banco")){
+		String erro = (String)sessao.getAttribute("erro");
+		%>
+		<script type="text/javascript">
+		$('#titulo-erro').text('Erro tecnico');
+		$('#mensagem-erro').text("<%=erro%>");
+		$("#modal-erro").modal('show');
+		</script>
+	<%
+sessao.setAttribute("mensagem", null);			
+	}//fim do if erro endereço
+	
+	else if(sessao.getAttribute("mensagem").equals("sucesso")){%>
+		<script type="text/javascript">
+		$("#modal-sucesso").modal('show');
+	</script>	
+<%sessao.setAttribute("mensagem", null);
+	}//fim do if sucesso
 
+}//fim do primiro if%>
+
+</html>

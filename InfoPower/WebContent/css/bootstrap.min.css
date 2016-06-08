@@ -2266,16 +2266,16 @@ pre code {
 		width: 75%
 	}
 	.col-md-8 {
-		width: 66.66666667%
+		width: 35%
 	}
 	.col-md-7 {
 		width: 58.33333333%
 	}
 	.col-md-6 {
-		width: 50%
+		width: 980px;
 	}
 	.col-md-5 {
-		width: 41.66666667%
+		width: 100%
 	}
 	.col-md-4 {
 		width: 33.33333333%
@@ -2928,7 +2928,7 @@ input[type=search] {
 }
 
 .form-group {
-	margin-bottom: 15px
+	margin-bottom: 15px;
 }
 
 .checkbox, .radio {

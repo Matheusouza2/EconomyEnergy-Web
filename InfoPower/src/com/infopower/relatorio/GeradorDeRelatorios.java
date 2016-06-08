@@ -1,13 +1,8 @@
 package com.infopower.relatorio;
 
-import java.sql.Connection;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.ServletContext;
 
 import com.infopower.entidades.Fatura;
-import com.infopower.jdbcConnection.faturaDAO;
 
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -17,8 +12,6 @@ import net.sf.jasperreports.view.JasperViewer;
 
 public class GeradorDeRelatorios {
 	
-	private Connection conexao;
-
     public GeradorDeRelatorios() {
     }
 
@@ -36,7 +29,6 @@ public class GeradorDeRelatorios {
     		parametros.put("dataFatura", fatura.getData());
     		parametros.put("consumoDia", fatura.getConsumoDia());
     		parametros.put("consumoMes", fatura.getConsumoMes());
-    		parametros.put("consumoKw", fatura.getConsumoKw());
     		parametros.put("consumoReal", fatura.getConsumoRs());
     		 
             // compila jrxml e gera o jasper

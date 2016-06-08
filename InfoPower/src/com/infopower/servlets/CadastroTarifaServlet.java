@@ -1,6 +1,7 @@
 package com.infopower.servlets;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -8,9 +9,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.infopower.controladores.ControladorTarifa;
 import com.infopower.entidades.Tarifa;
+import com.infopower.exception.TarifaExistenteException;
 import com.infopower.jdbcConnection.TarifaDAO;
 
 @WebServlet("/TarifaControle")
@@ -26,14 +29,22 @@ public class CadastroTarifaServlet extends HttpServlet {
 		String acao = request.getParameter("acao");
 		TarifaDAO tarifaDao = new TarifaDAO();
 		
+		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+		HttpSession sessao = httpServletRequest.getSession();
 			if(acao != null && acao.equals("exc")){
 			
 			int id = Integer.parseInt(request.getParameter("id"));
 			
 			Tarifa tarifa = new Tarifa();
 			tarifa.setIdTarifa(id);
-			tarifaDao.excluir(tarifa);
-			
+			try {
+				tarifaDao.excluir(tarifa);
+			} catch (SQLException e) {
+				sessao.setAttribute("mensagem", "erro-banco");
+				sessao.setAttribute("erro", e.getMessage());
+				response.sendRedirect("JSP/listaTarifa.jsp");
+			}
+			sessao.setAttribute("mensagem", "sucesso-exc");
 			response.sendRedirect("JSP/listaTarifa.jsp");
 		}
 
@@ -42,11 +53,16 @@ public class CadastroTarifaServlet extends HttpServlet {
 			String id = request.getParameter("id");
 			
 			Tarifa tarifa = new Tarifa();
-			tarifa = tarifaDao.procurar(Integer.parseInt(id));
+			try {
+				tarifa = tarifaDao.procurar(Integer.parseInt(id));
+			} catch (NumberFormatException | SQLException e) {
+				sessao.setAttribute("mensagem", "erro-banco");
+				sessao.setAttribute("erro", e.getMessage());
+				response.sendRedirect("JSP/atualizarTarifa.jsp");
+			}
 			request.setAttribute("tarifa", tarifa);
 			RequestDispatcher saida = request.getRequestDispatcher("JSP/atualizarTarifa.jsp");
 			saida.forward(request, response);
-				
 		}
 	}
 
@@ -55,28 +71,30 @@ public class CadastroTarifaServlet extends HttpServlet {
 		
 			String acao = request.getParameter("acao");
 			
+			HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+			HttpSession sessao = httpServletRequest.getSession();
+			
 			if(acao != null && acao.equals("salv")){
 				// recebe dados da tela
 				String nome = request.getParameter("nomeTarifa");
 				String valor = request.getParameter("valorTarifa");
-	
-				// cria objeto usuario e seta os valores vindos da tela
-	
-				Tarifa tarifa = new Tarifa();
-				tarifa.setNome(nome);
-				tarifa.setValor(Double.parseDouble(valor));
+				double valorTarifa = Double.parseDouble(valor.replace(",", "."));	
 				
-				// pede para clienteDao cadastrar no banco de dados
-	
-				TarifaDAO tarifaDao = new TarifaDAO();
-				tarifaDao.cadastrar(tarifa);
-	
-				response.setContentType("text/html");
-				// New location to be redirected
-				String site = new String("JSP/cadastroTarifa.jsp");
-	
-				response.setStatus(response.SC_MOVED_TEMPORARILY);
-				response.setHeader("Location", site);
+				ControladorTarifa controladorTarifa = new ControladorTarifa();
+				Tarifa tarifa = new Tarifa(nome, valorTarifa);
+				
+				try {
+					controladorTarifa.cadastar(tarifa);
+					sessao.setAttribute("mensagem", "sucesso");
+					response.sendRedirect("JSP/cadastroTarifa.jsp");
+				} catch (TarifaExistenteException e) {
+					sessao.setAttribute("mensagem", "erro-existe");
+					response.sendRedirect("JSP/cadastroTarifa.jsp");
+				} catch (SQLException e) {
+					sessao.setAttribute("mensagem", "erro-banco");
+					sessao.setAttribute("erro", e.getMessage());
+					response.sendRedirect("JSP/cadastroTarifa.jsp");
+				}
 			}
 			if(acao != null && acao.equals("alt")){
 				
@@ -90,13 +108,16 @@ public class CadastroTarifaServlet extends HttpServlet {
 				//pede para ControladorCliente cadastrar no banco de dados
 				
 				ControladorTarifa tarifaControler = new ControladorTarifa();
-				tarifaControler.alterar(tarifa);
+				try {
+					tarifaControler.alterar(tarifa);
+				} catch (SQLException e) {
+					sessao.setAttribute("mensagem", "erro-banco");
+					sessao.setAttribute("erro", e.getMessage());
+					response.sendRedirect("JSP/atualizarTarifa.jsp");
+				}
 				
-			      String site = new String("JSP/listaTarifa.jsp");
-
-			      response.setStatus(response.SC_MOVED_TEMPORARILY);
-			      response.setHeader("Location", site);
+				sessao.setAttribute("mensagem", "sucesso-alt");
+				response.sendRedirect("JSP/listaTarifa.jsp");
 			}
-		
 	}
 }

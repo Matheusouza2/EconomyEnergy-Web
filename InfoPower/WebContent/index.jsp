@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
     <%@ page import="com.infopower.entidades.Cliente"%>
 <%@ page import="java.util.List"%>
@@ -108,7 +108,7 @@
                         <div class="modal-dialog">
                             <div class="loginmodal-container">
                                 <h1><i class="fa fa-user"></i> Sua Conta de Cliente</h1><br>
-                                <form method="post" action="/InfoPower/AutenticadorCliente">
+                                <form data-toggle="" method="post" action="/InfoPower/AutenticadorCliente">
                                     <input type="text" id="user" name="user" placeholder="Nome Login" autofocus="autofocus" autocomplete="on">
                                     <input type="password" name="pass" placeholder="Senha" required>
                                     <input type="submit" name="loginusuario" class="login loginmodal-submit" value="Logar Usuario">
@@ -315,6 +315,54 @@ $(document).ready(function(){
     });
 });
 </script>
+
+	<!-- Modal -->
+				<div class="alert-danger">
+					<div class="modal fade" id="erro-login" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+					  <div class="modal-dialog" role="document">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
+					       <div class="alert-danger"><h4 class="modal-title" id="erro-titulo"><h4></div>
+					      </div>
+					      <div class="modal-body" id="erro-mensagem">
+					       
+					      </div>
+					      <div class="modal-footer">
+					      <button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
+					      </div>
+					    </div>
+					  </div>
+					</div>
+				</div>
+				 <!-- /.modal -->
 </body>
 
+<% 
+if(session.getAttribute("mensagem") != null){
+	
+if(session.getAttribute("mensagem").equals("erro")){
+	%>
+	<script type="text/javascript">
+	$('#erro-titulo').text('Login e/ou senha invalidos');
+	$('#erro-mensagem').text("Confira se o login e/ou senha foram digitados corretamente");
+	$("#erro-login").modal('show');
+	</script>
+<%
+session.setAttribute("mensagem", null);
+	}
+
+else if(session.getAttribute("mensagem").equals("erro-banco")){
+		String erro = (String) session.getAttribute("erro");
+	%>
+	<script type="text/javascript">
+	$('#erro-titulo').text('Erro tecnico');
+	$('#erro-mensagem').text("<%=erro%>");
+	$("#erro-login").modal('show');
+	</script>
+<%
+session.setAttribute("mensagem", null);			
+}
+
+}%>
 </html>

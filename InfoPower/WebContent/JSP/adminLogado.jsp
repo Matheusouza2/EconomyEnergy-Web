@@ -1,3 +1,5 @@
+<%@page import="com.infopower.controladores.ControladorTarifa"%>
+<%@page import="com.infopower.controladores.ControladorCliente"%>
 <%@page import="javax.websocket.SendResult"%>
 <%@page import="org.apache.catalina.ha.backend.Sender"%>
 <%@page import="com.infopower.entidades.Administrador"%>
@@ -53,42 +55,63 @@
 								response.sendRedirect("Usuario.jsp");
 							}%>
         </div>
+
+<%ControladorAdmin  controlerAdmin = new ControladorAdmin();
+ControladorCliente controlerCliente = new ControladorCliente();
+ControladorTarifa controlerTarifa = new ControladorTarifa();
+int i = 0;
+int admins = 0;
+int clientes = 0;
+int tarifas = 0;
+for(i = 0; i < controlerAdmin.listar().size(); i++){
+	admins++;
+}
+
+for(i = 0; i < controlerCliente.listar().size(); i++){
+	clientes++;
+}
+
+for(i = 0; i < controlerTarifa.listar().size(); i++){
+	tarifas++;
+}
+
+%>        
         
         <div id="clientes" class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="#" >
- <i class="fa fa-users fa-5x"></i>
-                      <h4>Clientes</h4>
-                      </a>
+                      <div class="div-square" style="text-align: center;">
+               <a href="listaCliente.jsp">
+ 					<i class="fa fa-users fa-5x"></i>
+                      <h4><%=clientes%> Clientes</h4>
+               </a>
                       </div>
                      
                      
                   </div>
                   <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="#" >
- <i class="fa fa-key fa-5x"></i>
-                      <h4>Admins</h4>
-                      </a>
+                      <div class="div-square" style="text-align: center;">
+					<a href="listaAdmin.jsp">
+ 						<i class="fa fa-key fa-5x"></i>
+                      <h4><%=admins%> Admins</h4>
+                    </a>
                       </div>
                      
                      
                   </div>
                   <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="#" >
- <i class="fa fa-list-alt fa-5x"></i>
-                      <h4>Tarifas</h4>
-                      </a>
+                      <div class="div-square" style="text-align: center;">
+                 <a href="listaTarifa.jsp">       
+ 					<i class="fa fa-list-alt fa-5x"></i>
+                      <h4><%=tarifas%> Tarifas</h4>
+                 </a>     
                       </div>
                      
                 
              </div>
 
 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
+                      <div class="div-square" style="text-align: center;">
                            <a href="https://github.com/InfoPower-tec/Economy-Energy" >
- <i class="fa fa-github fa-5x"></i>
+ 				<i class="fa fa-github fa-5x"></i>
                       <h4>GitHub</h4>
                       </a>
                       </div>
@@ -99,9 +122,9 @@
 
 
 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="#" >
- <i class="fa fa-sign-out fa-5x"></i>
+                      <div class="div-square" style="text-align: center;">
+                           <a href="/InfoPower/AutenticadorAdministrador2" >
+ 					<i class="fa fa-sign-out fa-5x"></i>
                       <h4>Logout</h4>
                       </a>
                       </div>

@@ -1,8 +1,7 @@
 package com.infopower.servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
+import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,15 +14,9 @@ import javax.servlet.http.HttpSession;
 import com.infopower.controladores.ControladorAdmin;
 import com.infopower.criptografia.Criptografia;
 import com.infopower.entidades.Administrador;
-import com.infopower.entidades.Cliente;
 import com.infopower.entidades.Endereco;
-import com.infopower.exception.ClienteExisteException;
+import com.infopower.exception.AdministradorExistenteException;
 import com.infopower.jdbcConnection.AdministradorDAO;
-
-import groovy.ui.SystemOutputInterceptor;
-
-import com.infopower.jdbcConnection.AdministradorDAO;
-
 
 @WebServlet("/admControle")
 public class CadastroAdmServlet extends HttpServlet {
@@ -37,22 +30,37 @@ public class CadastroAdmServlet extends HttpServlet {
 		String acao = request.getParameter("acao");
 		AdministradorDAO adminDao = new AdministradorDAO();
 		
+		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+		HttpSession sessao = httpServletRequest.getSession();
 		if(acao != null && acao.equals("exc")){
 			
 			int id = Integer.parseInt(request.getParameter("id"));
 			
 			Administrador admin = new Administrador();
 			admin.setMatricula(id);
-			adminDao.excluir(admin);
+			try {
+				adminDao.excluir(admin);
+				sessao.setAttribute("mensagem", "sucesso");
+				response.sendRedirect("JSP/listaAdmin.jsp");
+			} catch (SQLException e) {
+				sessao.setAttribute("mensagem", "erro-banco");
+				sessao.setAttribute("erro", e.getMessage());
+				response.sendRedirect("JSP/listaAdmin.jsp");
+			}
 			
-			response.sendRedirect("JSP/listaAdmin.jsp");
 		}
 		if(acao != null && acao.equals("alt")){
 			
 			String id = request.getParameter("id");
 			
 			Administrador admin = new Administrador();
-			admin = adminDao.procurar(Integer.parseInt(id));
+			try {
+				admin = adminDao.procurar(Integer.parseInt(id));
+			} catch (NumberFormatException | SQLException e) {
+				sessao.setAttribute("mensagem", "erro-banco");
+				sessao.setAttribute("erro", e.getMessage());
+				response.sendRedirect("JSP/atualizarAdministrador.jsp");
+			}
 			request.setAttribute("admin", admin);
 			RequestDispatcher saida = request.getRequestDispatcher("JSP/atualizarAdministrador.jsp");
 			saida.forward(request, response);
@@ -78,33 +86,23 @@ public class CadastroAdmServlet extends HttpServlet {
 			Endereco endereco = new Endereco(logradouro, numero, bairro, cidade, cep, estado, pais);
 			Administrador adm = new Administrador(nome, login, senha, endereco, telefone);
 			
+			HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+			HttpSession sessao = httpServletRequest.getSession();
+	
 			//pede para controlador cadastrar no banco de dados
 			ControladorAdmin controladorAdmin = new ControladorAdmin();
+			
 			try {
 				controladorAdmin.cadastrar(adm,endereco);
-			} catch (ClienteExisteException e) {
-				// enviando mensagem de erro
-				
-				System.out.println(e.getMessage());
-				/*PrintWriter out = response.getWriter();
-				out.println("<html>");
-				out.println("<body>");
-				out.println("<H3>LOGIN OU SENHA JÁ EXISTE!</H3>");
-				out.println("<a href='#' onclick='history.go(-1);'>voltar</a>");
-				out.println("</body>");
-				out.println("</html>");
-				 out.close();
-				 */
-				RequestDispatcher saida = request.getRequestDispatcher("JSP/naoLogado.jsp");
-				saida.forward(request, response);
-			}
-			
-			response.setContentType("text/html");
-		      // grava no banco e retorna pra pagina de admin logado
-			 response.sendRedirect("JSP/cadastroAdmin.jsp"); 
-		
-
-		}
-	
-
+				sessao.setAttribute("mensagem", "sucesso");
+				response.sendRedirect("JSP/cadastroAdmin.jsp");
+			} catch (AdministradorExistenteException e) {
+				sessao.setAttribute("mensagem", "erro");
+				response.sendRedirect("JSP/cadastroAdmin.jsp");
+			} catch (SQLException e) {
+				sessao.setAttribute("mensagem", "erro-banco");
+				sessao.setAttribute("erro", e.getMessage());
+				response.sendRedirect("JSP/cadastroAdmin.jsp");
+			}	
+		}	
 }

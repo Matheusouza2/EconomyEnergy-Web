@@ -75,7 +75,7 @@
      <table border="1" class="table table-bordered">
 
 <tr class="linha_listar" bgcolor="#EAEAEA">
-	<th>ID</th> <th>DATA</th> <th>CONSUMO_DIA</th> <th>CONSUMO_KW</th> <th>CONSUMO_MÊS</th> <th>CONSUMO_R$</th>  <th>AÇÃO</th>
+	<th>ID</th> <th>DATA</th> <th>CONSUMO_DIA</th> <th>CONSUMO_MÊS</th> <th>CONSUMO_R$</th>  <th>AÇÃO</th>
 </tr>
 
 
@@ -92,7 +92,6 @@ for(Fatura fatura : lista){
 			<td class="coluna_listar"><% out.print(fatura.getId()); %></td>
 			<td class="coluna_listar"><% out.print(fatura.getData()); %></td>
 			<td class="coluna_listar"><% out.print(fatura.getConsumoDia()); %></td>
-			<td class="coluna_listar"><% out.print(fatura.getConsumoKw()); %></td>
 			<td class="coluna_listar"><% out.print(fatura.getConsumoMes()); %></td>
 			<td class="coluna_listar"><% out.print(fatura.getConsumoRs()); %></td>
 	
@@ -104,7 +103,6 @@ for(Fatura fatura : lista){
 			<input type="hidden" name="id" value="<%=fatura.getId() %>">
 			<input type="hidden" name="data_fatura" value="<%=fatura.getData() %>">
 			<input type="hidden" name="consumo_dia" value="<%=fatura.getConsumoDia() %>">
-			<input type="hidden" name="consumo_kw" value="<%=fatura.getConsumoKw() %>">
 			<input type="hidden" name="consumo_rs" value="<%=fatura.getConsumoRs() %>">
 			<input type="hidden" name="consumo_mes" value="<%=fatura.getConsumoMes()%>">
 			

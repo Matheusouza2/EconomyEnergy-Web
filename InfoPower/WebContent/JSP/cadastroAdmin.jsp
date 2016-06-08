@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page import="com.infopower.entidades.Cliente"%>
+<%@ page import="com.infopower.entidades.Administrador"%>
 <%@ page import="com.infopower.controladores.ControladorAdmin"%>
 <%@ page import="java.util.List"%>
 <!DOCTYPE html>
@@ -16,28 +16,20 @@
     <meta name="author" content="">
 
     <title>Painel Administrador</title>
-
-    <!-- Bootstrap Core CSS -->
+	
+    <script src="../js/jquery.js"></script>
+    <script src="../js/validator.js"></script>
     <link href="../css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
     <link href="../css/admin.css" rel="stylesheet">
-    
     <link href="../css/estilocadastro/css" rel="stylesheet">
-    
-    
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+ 
 
 </head>
 
 <body>
-
+<%
+Administrador admin = (Administrador) request.getAttribute("admin");
+%>
     <div id="wrapper">
 
         <!-- Sidebar -->
@@ -60,126 +52,123 @@
                     <div class="col-lg-12">
                         <h1>Cadastrar Administrador</h1><br/>
                         
-                <h5 style="overflow:auto; color: red; " >(*) Preenchimento Obrigatório !</h5><br/>
+                <h5 style="overflow:auto; color: red; " > Todos os campos são Obrigatório !</h5><br/>
                         
                         
-                        <div class="col-md-6 col-sm-5">
+                        <div class="col-md-6">
 
 
-<form name="cadastro" class="form-horizontal" action="/InfoPower/admControle" method="post" onsubmit="return ValNumber()">
+<form name="cadastro" class="form-horizontal" action="/InfoPower/admControle?acao=salv" method="post" data-toggle="validator">
     <fieldset>
 
                     
             <!-- NOME input-->
               
        
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="textinput1">Nome *</label>
-                <div class="col-md-8">
+            <div class="form-group has-feedback">
+                <label class="col-md-4 control-label" for="textinput1">Nome</label>
+                <div class="col-md-8" style="float: left;">
 
-                    <input id="textinput1" name="nomeAdm" type="text" placeholder="Seu Nome" autofocus="autofocus" class="form-control input-md">
-
-                </div>
+                    <input id="nomeAdm" name="nomeAdm" required type="text" placeholder="Seu Nome" autofocus="autofocus" class="form-control input-md" >
+						<span class="glyphicon form-control-feedback" aria-hidden="true"></span>	
+                </div><div class="help-block with-errors" style="float: right; padding-right: 160px;"></div>
+                
             </div>
-
-
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="logininput">Login *</label>
+			
+            <div class="form-group has-feedback">
+                <label class="col-md-4 control-label" for="logininput">Login</label>
                 <div class="col-md-8">
 
-                    <input id="logininput" name="loginAdm" type="text" placeholder="Login Administrador" class="form-control input-md">
-
-                </div>
+                    <input id="loginAdm" name="loginAdm" required type="text" placeholder="Login Administrador" class="form-control input-md">
+					<span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                </div><div class="help-block with-errors" style="float: right; padding-right: 160px;"></div>
             </div>
             
             
             <!-- Password input-->
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="passwordinput1">Senha *</label >
+            <div class="form-group has-feedback">
+                <label class="col-md-4 control-label" for="passwordinput1">Senha</label >
                 <div class="col-md-8">
-                    <input id="passwordinput1" name="senhaAdm" type="password" placeholder="Digite uma Senha" class="form-control input-md">
-
-                </div>
+                    <input id="passwordinput1" name="senhaAdm" required type="password" placeholder="Digite uma Senha" class="form-control input-md">
+					<span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                </div><div class="help-block with-errors" style="float: right; padding-right: 160px;"></div>
             </div>
 
             <!-- Telefone input-->
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="numberinput1"  >Telefone *</label>
+            <div class="form-group has-feedback">
+                <label class="col-md-4 control-label" for="numberinput1"  >Telefone</label>
                 <div class="col-md-8">
-                    <input id="telefoneAdm" name="telefoneAdm" onkeypress="mascara(this, '## #####-####')" type="tel" placeholder="(00) 00000-0000" class="form-control input-md" maxlength=13 >
-
-                </div>
+                    <input id="telefoneAdm" name="telefoneAdm" required type="tel" placeholder="(00) 00000-0000" class="form-control input-md" maxlength=13 >
+					<span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                </div><div class="help-block with-errors" style="float: right; padding-right: 160px;"></div>
             </div>
 
-
-
-                   <!--CEP input-->
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="cepinput1">CEP *</label>
+            <!--CEP input-->
+            <div class="form-group has-feedback">
+                <label class="col-md-4 control-label" for="cepinput1">CEP</label>
                 <div class="col-md-8">
 
-                    <input id="cepAdm" name="cepAdm" onkeypress="mascara(this, '#####-###')" maxlength=9 type="text" placeholder="Cep Administrador" class="form-control input-md">
-
-                </div>
+                    <input id="cepAdm" name="cepAdm" required maxlength=9 type="text" placeholder="Cep Administrador" class="form-control input-md">
+					<span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                </div><div class="help-block with-errors" style="float: right; padding-right: 160px;"></div>
             </div>
-
-
 
             <!-- Endereco input-->
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="Enderecoinput1">Endereco *</label>
+            <div class="form-group has-feedback">
+                <label class="col-md-4 control-label" for="Enderecoinput1">Endereco</label>
                 <div class="col-md-8">
-                    <input id="Enderecoinput1" name="enderecoAdm" type="text" placeholder="Endereco" class="form-control input-md">
-
-                </div>
+                    <input id="EnderecoInput" name="enderecoAdm" required type="text" placeholder="Endereco" class="form-control input-md">
+					<span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                </div><div class="help-block with-errors" style="float: right; padding-right: 160px;"></div>
             </div>
 
-                   <!--Numero input-->
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="cepinput1">Numero *</label>
+			<!--Numero input-->
+            <div class="form-group has-feedback">
+                <label class="col-md-4 control-label" for="cepinput1">Numero</label>
                 <div class="col-md-8">
-                    <input id="cepinput1" name="numeroAdm" type="number" placeholder="Numero" class="form-control input-md">
-                </div>
+                    <input id="NumeroInput" name="numeroAdm" required type="text" pattern="^[0-9]" placeholder="Numero" class="form-control input-md">
+                    <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                </div><div class="help-block with-errors" style="float: right; padding-right: 160px;"></div>
             </div>
 
 
             <!-- Bairro input-->
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="Bairroinput1">Bairro *</label>
+            <div class="form-group has-feedback">
+                <label class="col-md-4 control-label" for="Bairroinput1">Bairro</label>
                 <div class="col-md-8">
-                    <input id="Bairroinput1" name="bairroAdm" type="text" placeholder="Bairro" class="form-control input-md">
-
-                </div>
+                    <input id="BairroInput" name="bairroAdm" required type="text" placeholder="Bairro" class="form-control input-md">
+					<span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                </div><div class="help-block with-errors" style="float: right; padding-right: 160px;"></div>
             </div>
 
 
                <!-- Cidade input-->
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="Estadoinput1">Cidade *</label>
+            <div class="form-group has-feedback">
+                <label class="col-md-4 control-label" for="Estadoinput1">Cidade</label>
                 <div class="col-md-8">
-                    <input id="Estadoinput1" name="cidadeAdm" type="text" placeholder="Cidade" class="form-control input-md">
-
-                </div>
+                    <input id="cidadeInput" name="cidadeAdm" required type="text" placeholder="Cidade" class="form-control input-md">
+					<span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                </div><div class="help-block with-errors" style="float: right; padding-right: 160px;"></div>
             </div>
 
 
                <!-- Estado input-->
-            <div class="form-group">
-                <label class="col-md-4 control-label" for="Estadoinput1">Estado *</label>
+            <div class="form-group has-feedback">
+                <label class="col-md-4 control-label" for="Estadoinput1">Estado</label>
                 <div class="col-md-8">
-                    <input id="Estadoinput1" name="estadoAdm" type="text" placeholder="Estado" class="form-control input-md">
-
-                </div>
+                    <input id="EstadoInput" name="estadoAdm" required type="text" placeholder="Estado" class="form-control input-md">
+					<span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                </div><div class="help-block with-errors" style="float: right; padding-right: 160px;"></div>
             </div>
 
 
             <!-- País input-->
-            <div class="form-group">
+            <div class="form-group has-feedback">
                 <label class="col-md-4 control-label" for="Paisinput1">Pais</label>
                 <div class="col-md-8">
-                    <input id="Paisinput1" name="paisAdm" type="text" placeholder="Pais" class="form-control input-md">
-
-                </div>
+                    <input id="PaisInput" name="paisAdm" required type="text" placeholder="Pais" class="form-control input-md">
+					<span class="glyphicon form-control-feedback" aria-hidden="true"></span>
+                </div><div class="help-block with-errors" style="float: right; padding-right: 160px;"></div>
             </div>
 
             <!-- Button (Double) -->
@@ -207,174 +196,160 @@
 
     </div>
     <!-- /#wrapper -->
-    
-    <!-- MODAL SUCESSO -->
-
-<div class="modal fade"  id="myModal" role="dialog">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <div class ="alert-success">  <h4 id="modalNome" class="modal-title"></h4></div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-success btn-sm" data-dismiss="modal">Sair</button>
-
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script type="text/javascript">
-/*mascaras de telefone, cep e cpf
-$(document).ready(function(){
-	$("#telefoneAdm").mask("(99)99999-9999");
-	$("#cepAdm").mask("99999-999");
-	$("#cefInput").mask("999.999.999-99");
-	});*/
-
-	 function mascara(campo_passado, mask){
-		 var campo = campo_passado.value.length;
-		 var saida = mask.substring(0,1);
-		 var texto = mask.substring(campo);
-			 if (texto.substring(0,1) != saida){
-			 campo_passado.value += texto.substring(0,1);
-			 }
-	}
-</script>
-		<!-- VALIDAÇÃO DOS CAMPOS OBRIGATORIOS -->
-		<script type="text/javascript">
- 
-function validaForm(){
-           d = document.cadastro;
-           
-           //validar nome
-           if (d.nomeAdm.value == ""){
-        	  		 $("#myModal").modal({backdrop:"static"});
-        	  		 $("#myModal").modal();
-        	  		 $("#modalNome").text("O campo NOME  deve ser preenchido!");
-                     d.nomeAdm.style.backgroundColor="#E9967A";
-                     d.nomeAdm.style.color="#ffffff";
-                     d.nomeAdm.focus();
-                     return false;
-           }
-           //validar login
-            if (d.loginAdm.value == ""){
-            		$("#myModal").modal({backdrop:"static"});
-   	  		 		$("#myModal").modal();
-   	  				$("#modalNome").text("O campo LOGIN  deve ser preenchido!");
-                   d.loginAdm.style.backgroundColor="#E9967A";
-                   d.loginAdm.style.color="#ffffff";
-                   d.loginAdm.focus();
-                   return false;
-         }
-            if (d.senhaAdm.value == ""){
-        		$("#myModal").modal({backdrop:"static"});
-	  		 		$("#myModal").modal();
-	  				$("#modalNome").text("O campo SENHA  deve ser preenchido!");
-	               d.senhaAdm.style.backgroundColor="#E9967A";
-	               d.senhaAdm.style.color="#ffffff";
-	               d.senhaAdm.focus();
-               return false;
-    		 }
-            
-            if (d.telefoneAdm.value == ""){
-        		$("#myModal").modal({backdrop:"static"});
-	  		 		$("#myModal").modal();
-	  				$("#modalNome").text("O campo TELEFONE  deve ser preenchido!");
-	               d.telefoneAdm.style.backgroundColor="#E9967A";
-	               d.telefoneAdm.style.color="#ffffff";
-	               d.telefoneAdm.focus();
-               return false;
-    		 }
-            if (d.cepAdm.value == ""){
-        		$("#myModal").modal({backdrop:"static"});
-	  		 		$("#myModal").modal();
-	  				$("#modalNome").text("O campo CEP  deve ser preenchido!");
-	               d.cepAdm.style.backgroundColor="#E9967A";
-	               d.cepAdm.style.color="#ffffff";
-	               d.cepAdm.focus();
-               return false;
-    		 }
-            
-            if (d.enderecoAdm.value == ""){
-        		$("#myModal").modal({backdrop:"static"});
-	  		 		$("#myModal").modal();
-	  				$("#modalNome").text("O campo ENDEREÇO  deve ser preenchido!");
-	               d.enderecoAdm.style.backgroundColor="#E9967A";
-	               d.enderecoAdm.style.color="#ffffff";
-	               d.enderecoAdm.focus();
-               return false;
-    		 }
-            
-            if (d.numeroAdm.value == ""){
-        		$("#myModal").modal({backdrop:"static"});
-	  		 		$("#myModal").modal();
-	  				$("#modalNome").text("O campo NUMERO  deve ser preenchido!");
-	               d.numeroAdm.style.backgroundColor="#E9967A";
-	               d.numeroAdm.style.color="#ffffff";
-	               d.numeroAdm.focus();
-               return false;
-    		 }
-            
-            if (d.bairroAdm.value == ""){
-        		$("#myModal").modal({backdrop:"static"});
-	  		 		$("#myModal").modal();
-	  				$("#modalNome").text("O campo BAIRRO  deve ser preenchido!");
-	               d.bairroAdm.style.backgroundColor="#E9967A";
-	               d.bairroAdm.style.color="#ffffff";
-	               d.bairroAdm.focus();
-               return false;
-    		 }
-            
-            if (d.cidadeAdm.value == ""){
-        		$("#myModal").modal({backdrop:"static"});
-	  		 		$("#myModal").modal();
-	  				$("#modalNome").text("O campo CIDADE  deve ser preenchido!");
-	               d.cidadeAdm.style.backgroundColor="#E9967A";
-	               d.cidadeAdm.style.color="#ffffff";
-	               d.cidadeAdm.focus();
-               return false;
-    		 }
-            if (d.estadoAdm.value == ""){
-        		$("#myModal").modal({backdrop:"static"});
-	  		 		$("#myModal").modal();
-	  				$("#modalNome").text("O campo ESTADO  deve ser preenchido!");
-	               d.estadoAdm.style.backgroundColor="#E9967A";
-	               d.estadoAdm.style.color="#ffffff";
-	               d.estadoAdm.focus();
-               return false;
-    		 }
-            else{
-            	
-            	return true;
-            }
-        
-	document.cadastro.submit();
-         
-}
-  
- </script>
-
-
-    <!-- jQuery -->
-    <script src="../js/jquery.js"></script>
-    <script src="../js/MaskJquery.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="../js/bootstrap.min.js"></script>
-
-    <!-- Menu Toggle Script -->
-    <script>
-    $("#menu-toggle").click(function(e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
+    $(document).ready(function(){
+       $("#cepAdm").mask('99999-999'); 
+       $("#telefoneAdm").mask("(99)99999-9999");
     });
     </script>
+    
+		<!-- VALIDAÇÃO DOS CAMPOS OBRIGATORIOS -->
+		
+  <script src="../js/jquery.min.js"></script>
+ <script src="../js/bootstrap.min.js"></script>
+  <script src="../js/jquery.easing.min.js"></script>
+    <script src="../js/jquery.fittext.js"></script>
+    <script src="../js/wow.min.js"></script>
+    <script src="../js/creative.js"></script>
+     <!-- Mascara -->
+    <script src="../js/MaskJquery.js"></script>
 
+<!-- Buscar cep -->
+    <script type="text/javascript" >
+
+        $(document).ready(function() {
+        	function limpa_formulário_cep() {
+                // Limpa valores do formulário de cep.
+                $("#EnderecoInput").val("");
+                $("#BairroInput").val("");
+                $("#cidadeInput").val("");
+                $("#EstadoInput").val("");
+            }
+            //Quando o campo cep perde o foco.
+            $("#cepAdm").blur(function() {
+
+                //Nova variável "cep" somente com dígitos.
+                var cep = $(this).val().replace(/\D/g, '');
+
+                //Verifica se campo cep possui valor informado.
+                if (cep != "") {
+
+                    //Expressão regular para validar o CEP.
+                   var validacep = /^[0-9]{8}$/;
+
+                    //Valida o formato do CEP.
+                    if(validacep.test(cep)) {
+
+                        //Preenche os campos com "..." enquanto consulta webservice.
+                        $("#EnderecoInput").val("...");
+                		$("#BairroInput").val("...");
+                		$("#cidadeInput").val("...");
+                		$("#EstadoInput").val("...");
+
+                        //Consulta o webservice viacep.com.br/
+                        $.getJSON("//viacep.com.br/ws/"+ cep +"/json/?callback=?", function(dados) {
+
+                            if (!("erro" in dados)) {
+                                //Atualiza os campos com os valores da consulta.
+                                $("#EnderecoInput").val(dados.logradouro);
+                                $("#BairroInput").val(dados.bairro);
+                                $("#cidadeInput").val(dados.localidade);
+                                $("#EstadoInput").val(dados.uf);
+                                $("#PaisInput").val('Brasil');
+                                document.getElementById("PaisInput").disabled = true;
+                                document.getElementById("EstadoInput").disabled = true;
+                                document.getElementById("cidadeInput").disabled = true;
+                            } //end if.
+                            else {
+                            	$('#titulo-erro').text('Erro ao identificar cep');
+                        		$('#mensagem-erro').text('O cep não foi encontrado!');
+                        		$("#modal-erro").modal('show');
+                            }
+                        
+                        });
+                    }
+                }
+        	});
+        });
+
+    </script>
+    <!-- Fim da busca de CPF -->
+
+
+<!-- Modal -->
+				<div class="alert-success">
+					<div class="modal fade" id="modal-sucesso" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+					  <div class="modal-dialog" role="document">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
+					       <div class="alert-success"><h4 class="modal-title" id="modalLabel">Administrador Cadastrado com sucesso<h4></div>
+					      </div>
+					      <div class="modal-body">
+					        O Administrador foi cadastrado com sucesso
+					      </div>
+						<div class="modal-footer">
+					    	  <button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
+					      </div>
+					    </div>
+					  </div>
+					</div>
+				</div>
+				 <!-- /.modal -->
+				 
+				<!-- Modal -->
+				<div class="alert-danger">
+					<div class="modal fade" id="modal-erro" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+					  <div class="modal-dialog" role="document">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <button type="button" class="close" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
+					       <div class="alert-danger"><h4 class="modal-title" id="titulo-erro"><h4></div>
+					      </div>
+					      <div class="modal-body" id="mensagem-erro">
+					      </div>
+					      <div class="modal-footer">
+					      <button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
+					      </div>
+					    </div>
+					  </div>
+					</div>
+				</div>
+				 <!-- /.modal --> 
 </body>
 
+<% 
+if(sessao.getAttribute("mensagem") != null){
+	
+if(sessao.getAttribute("mensagem").equals("erro")){
+	%>
+	<script type="text/javascript">
+		$('#titulo-erro').text('Erro ao cadastrar administrador');
+		$('#mensagem-erro').text('Este login já está associado a um dos nossos administradores. Tente outro login!');
+		$("#modal-erro").modal('show');
+	</script>
+<%
+sessao.setAttribute("mensagem", null);
+	}//fim do if erro de login
+	
+	else if(sessao.getAttribute("mensagem").equals("erro-banco")){
+			String erro = (String) sessao.getAttribute("erro");
+		%>
+		<script type="text/javascript">
+		$('#titulo-erro').text('Erro tecnico');
+		$('#mensagem-erro').text("<%=erro%>");
+		$("#modal-erro").modal('show');
+		</script>
+	<%
+	sessao.setAttribute("mensagem", null);			
+	}
+	
+	else if(sessao.getAttribute("mensagem").equals("sucesso")){%>
+		<script type="text/javascript">
+		$("#modal-sucesso").modal('show');
+	</script>	
+<%sessao.setAttribute("mensagem", null);
+	}//fim do if sucesso
+}//fim do primiro if%>
+
 </html>
-    

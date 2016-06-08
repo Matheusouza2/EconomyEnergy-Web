@@ -8,14 +8,14 @@ import com.infopower.entidades.Endereco;
 
 public interface InterfaceCliente {
 	
-	public void cadastrar (Cliente cliente, Endereco endereco);
-	public void alterar (Cliente cliente, Endereco endereco);
-	public void excluir (Cliente cliente);
-	public List<Cliente> listar();
-	public Cliente procurar(Integer id);
-	public List<Cliente> procurarNome(String nome);
-	public Cliente autenticar(Cliente cliente);
-	public Cliente autenticar2(String nome, String senha);
-	public Boolean autenticarExiste(Cliente cliente);
-	public Boolean Existe(Cliente cliente) throws SQLException;
+	public void cadastrar (Cliente cliente, Endereco endereco)throws SQLException;
+	public void alterar (Cliente cliente, Endereco endereco)throws SQLException;
+	public void excluir (Cliente cliente)throws SQLException;
+	public List<Cliente> listar()throws SQLException;
+	public Cliente procurar(Integer id)throws SQLException;
+	public List<Cliente> procurarNome(String nome)throws SQLException;
+	public Cliente autenticar(Cliente cliente)throws SQLException;
+	public Boolean autenticarExiste(Cliente cliente)throws SQLException;
+	public Boolean existe(Cliente cliente) throws SQLException;
+	public boolean enderecoExiste(Endereco endereco)throws SQLException;
 }

@@ -2,6 +2,7 @@ package com.infopower.jdbcConnection;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -12,9 +13,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
-
-import com.infopower.entidades.Administrador;
 
 public class ArduinoDAO implements InterfaceArduino{
 	
@@ -23,6 +21,7 @@ public class ArduinoDAO implements InterfaceArduino{
 	private ArrayList<Double>lista;
 	private Calendar hora;
 	private String data;
+
 	@Override
 	public void cadastrar(double kw, String data) throws IOException {
 		BufferedWriter escrever = new BufferedWriter(
@@ -56,14 +55,19 @@ public class ArduinoDAO implements InterfaceArduino{
 			dia = 28;
 		}
 		String data = dia+"-"+mes+"-"+ano;
-		BufferedReader ler = new BufferedReader(
+		BufferedReader ler = null;
+		try{
+		ler = new BufferedReader(
 				new FileReader("C:/Users/Mathe/Desktop/Arduino-"+data+".txt"));
-		
-		while(ler.ready()){
-			double kw = Double.parseDouble(ler.readLine());
-			lista.add(kw);
+		}catch(FileNotFoundException e){}
+		if(ler != null){
+			while(ler.ready()){
+				double kw = Double.parseDouble(ler.readLine());
+				lista.add(kw);
+			}
+			ler.close();	
 		}
-		ler.close();
+		
 		return lista;
 	}
 	
@@ -75,7 +79,6 @@ public class ArduinoDAO implements InterfaceArduino{
 		
 		lista = new ArrayList<>();
 		
-		try {
 			preparador = con.prepareStatement(sql);
 			ResultSet resultado = preparador.executeQuery();
 			while(resultado.next()){
@@ -86,9 +89,7 @@ public class ArduinoDAO implements InterfaceArduino{
 			for (double kwMesSoma : lista) {
 				kwMesCadastra += kwMesSoma;
 			}
-			}catch (Exception e) {
-				
-			}
+			
 			preparador.close();
 			
 		String sql2 = "INSERT INTO fatura (consumo_dia, consumo_reais, data_fatura, consumo_mes) values (?,?,?,?)";
@@ -114,7 +115,7 @@ public class ArduinoDAO implements InterfaceArduino{
 		
 		String dataCadastro = dia+"/"+mes+"/"+ano; 
 		this.data = dataCadastro;
-		try {
+		
 			if(autenticarExiste() == false){
 				preparador = con.prepareStatement(sql2);
 				preparador.setDouble(1, kw);
@@ -123,15 +124,10 @@ public class ArduinoDAO implements InterfaceArduino{
 				preparador.setDouble(4, kwMesCadastra);
 				preparador.execute();
 				preparador.close();
-
-				System.out.println("Consumo Cadastrado com SUCESSO!");
 				}
-			} catch (SQLException e) {
-			e.printStackTrace();
-		}
 	}
 	
-	public boolean autenticarExiste() {
+	public boolean autenticarExiste()throws SQLException {
 		String sql = "SELECT * FROM FATURA WHERE data_fatura=?";
 		boolean existe = false;
 		try {

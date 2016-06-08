@@ -32,7 +32,7 @@ public class FiltroAutentica implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String url = httpServletRequest .getRequestURI();
         //capturando sessao
-        HttpSession sessao = httpServletRequest .getSession();
+        HttpSession sessao = httpServletRequest.getSession();
       //estar logado?
         if (sessao.getAttribute("adminLogado")!=null || url.contains("index.jsp") || url.contains("AutenticadorAdministrador2")
         		|| sessao.getAttribute("clienteLogado")!=null ) {
@@ -49,7 +49,4 @@ public class FiltroAutentica implements Filter {
     public void init(FilterConfig filterConfig) {
         this.contextPath = filterConfig.getServletContext().getContextPath();
     }
-
-
-
 }

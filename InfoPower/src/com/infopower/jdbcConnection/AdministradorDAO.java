@@ -7,8 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
 import com.infopower.entidades.Administrador;
 import com.infopower.entidades.Cliente;
 import com.infopower.entidades.Endereco;
@@ -20,11 +18,10 @@ public class AdministradorDAO implements InterfaceAdministrador {
 	List<Cliente> lista = new ArrayList<Cliente>();
 
 	@Override
-	public void cadastrar(Administrador administrador, Endereco endereco){
+	public void cadastrar(Administrador administrador, Endereco endereco)throws SQLException{
 		
 		String sql = "INSERT INTO ADMINISTRADOR (nome, login, senha, telefone, logradouro, numero, bairro, cidade, cep, estado, pais) values (?,?,?,?,?,?,?,?,?,?,?)";
 			
-		try {
 			preparador = con.prepareStatement(sql);
 			preparador.setString(1, administrador.getNome());
 			preparador.setString(2, administrador.getLogin());
@@ -39,18 +36,11 @@ public class AdministradorDAO implements InterfaceAdministrador {
 			preparador.setString(11, endereco.getPais());
 			preparador.execute();
 			preparador.close();
-
-			System.out.println("ADMINISTRADOR Cadastrado com SUCESSO!");
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-		}
 }
 
-	public void alterar(Administrador administrador) {
+	public void alterar(Administrador administrador) throws SQLException{
 		String sql = "UPDATE ADMINISTRADOR SET id_admin=?, nome=?, endereco=?, login=?, senha=?, telefone=?, cpf_cliente=? WHERE id_pessoa=?";
-
-		try {
+		
 			preparador = con.prepareStatement(sql);
 			preparador.setString(1, administrador.getNome());
 			preparador.setString(2, administrador.getEnd().getLogradouro());
@@ -59,37 +49,24 @@ public class AdministradorDAO implements InterfaceAdministrador {
 			preparador.setString(5, administrador.getTelefone());
 
 			preparador.close();
-
-			System.out.println("Alterado com SUCESSO!");
-		} catch (SQLException e) {
-
-			JOptionPane.showMessageDialog(null, e);
-		}
 	}
 
 	@Override
-	public void excluir(Administrador administrador) {
+	public void excluir(Administrador administrador) throws SQLException{
 		String sql = "DELETE FROM ADMINISTRADOR WHERE matricula=?";
 
-		try {
 			preparador = con.prepareStatement(sql);
 			preparador.setInt(1, administrador.getMatricula());
 
 			preparador.execute();
 			preparador.close();
-
-			System.out.println("Apagado com SUCESSO!");
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-		}
 	}
 
 	@Override
-	public List<Administrador> listar() {
+	public List<Administrador> listar() throws SQLException{
 		String sql = "SELECT * FROM ADMINISTRADOR";
 		List<Administrador> listaAdministrador = new ArrayList<Administrador>();
-		try {
+
 			preparador = con.prepareStatement(sql);
 
 			ResultSet resultado = preparador.executeQuery();
@@ -115,24 +92,44 @@ public class AdministradorDAO implements InterfaceAdministrador {
 
 			preparador.close();
 
-			//System.out.println("Lista Apresentada");
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-		}
-		return listaAdministrador;
+			return listaAdministrador;
 	}
 
 	@Override
-	public Administrador procurar(Integer id) {
-		return null;
+	public Administrador procurar(Integer id) throws SQLException{
+		String sql = "SELECT * FROM Administrador WHERE matricula=?";
+		Administrador admin = null;
+	
+			PreparedStatement preparador = con.prepareStatement(sql);
+			preparador.setInt(1, id);
+
+			ResultSet resultado = preparador.executeQuery();
+			
+			resultado.next();
+			
+			admin = new Administrador();
+			admin.setMatricula(resultado.getInt("matricula"));
+			admin.setNome(resultado.getString("nome"));
+			admin.setLogin(resultado.getString("login"));
+			admin.setSenha(resultado.getString("senha"));
+			admin.setTelefone(resultado.getString("telefone"));
+			admin.setBairro(resultado.getString("bairro"));
+			admin.setLogradouro(resultado.getString("logradouro"));
+			admin.setNumero(resultado.getInt("numero"));
+			admin.setCidade(resultado.getString("cidade"));
+			admin.setCep(resultado.getString("cep"));
+			admin.setEstado(resultado.getString("estado"));
+			admin.setPais(resultado.getString("pais"));	
+			resultado.close();
+
+		return admin;
 	}
 
 	@Override
-	public List<Administrador> procurarNome(String nome) {
+	public List<Administrador> procurarNome(String nome) throws SQLException{
 		String sql = "SELECT * FROM Cliente WHERE nome like";
 		List<Administrador> lista = new ArrayList<Administrador>();
-		try {
+
 			preparador = con.prepareStatement(sql);
 			preparador.setString(1, "%" + nome + "%");
 
@@ -147,19 +144,14 @@ public class AdministradorDAO implements InterfaceAdministrador {
 				lista.add(admin);
 			}
 
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
 		return lista;
 	}
 
 	@Override
-	public Administrador autenticar(Administrador administrador) {
+	public Administrador autenticar(Administrador administrador) throws SQLException{
 		String sql = "SELECT * FROM ADMINISTRADOR WHERE login=? and senha=?";
 		Administrador adminRetorno = null;
 		
-		try {
 			preparador = con.prepareStatement(sql);
 			preparador.setString(1, administrador.getLogin());
 			preparador.setString(2, administrador.getSenha());
@@ -175,37 +167,29 @@ public class AdministradorDAO implements InterfaceAdministrador {
 				adminRetorno = null;
 			}
 
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 		return adminRetorno;
 	}
 
 	@Override
-	public Boolean autenticarExiste(Administrador administrador) {
-		String sql = "SELECT * FROM ADMINISTRADOR WHERE login=? and senha=?";
+	public Boolean autenticarExiste(Administrador administrador) throws SQLException{
+		String sql = "SELECT * FROM ADMINISTRADOR WHERE login=?";
 		boolean existe = false;
-		try {
+
 			preparador = con.prepareStatement(sql);
 			preparador.setString(1, administrador.getLogin());
-			preparador.setString(2, administrador.getSenha());
-
+	
 			ResultSet resultado = preparador.executeQuery();
 			existe = resultado.next();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		
 		return existe;
 	}
-
+	
 	@Override
-	public Administrador autenticar2(String login, String senha) {
+	public Administrador autenticar2(String login, String senha) throws SQLException{
 		
 		String sql = "SELECT * FROM ADMINISTRADOR WHERE login=? and senha=?";
 		Administrador adminRetorno = null;
 		
-		try {
 			preparador = con.prepareStatement(sql);
 			preparador.setString(1, login);
 			preparador.setString(2, senha);
@@ -222,9 +206,6 @@ public class AdministradorDAO implements InterfaceAdministrador {
 				adminRetorno = null;
 			}
 
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 		return adminRetorno;
 		
 	}
