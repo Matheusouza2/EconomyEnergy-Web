@@ -2,9 +2,11 @@
  * Projeto: Economy Energy
  * Autor: Grupo InfoPower
  * Data: 03/05/2016
- * Versão: v1.6
+ * Versão: v1.7
  * Descrição: O Arduino recebe uma requisição HTTP e retorna um JSON que é tratado no HTML com Javascript para exibir na tela.
+ * Versão 1.7 trás primeiro teste de acionamento de led com relê
  */
+    
 #include <SPI.h>                
 #include <Ethernet.h>           //inclusão das duas bibliotecas para uso do ethernet Shield
 #include "EmonLib.h"                   //Inclui a biblioteca do sensor
@@ -22,6 +24,7 @@ EnergyMonitor sensor;                   // Cria a instancia do sensor
 double ampers = 0;
 double potencia = 0;
 double kw = 0;
+int porta_rele1 = 7;
 
 void setup(){
   Serial.begin(9600); // inicia o arduino
@@ -31,10 +34,15 @@ void setup(){
   servidor.begin();
   
   sensor.current(1, 154.4);        //Define o pino "1" como o pino que vai receber os dados e 154.4 é a calibração do sensor 100A/50mA para leitura mais aproximada possivel
+
+  pinMode(porta_rele1, OUTPUT); 
 }
 
 void loop(){
-
+  digitalWrite(porta_rele1, LOW);  //Liga rele 1
+  delay(2000);
+  digitalWrite(porta_rele1, HIGH); //Desliga rele 1
+  
   EthernetClient cliente = servidor.available(); // define um cliente para o uso do server
   
    ampers = sensor.calcIrms(1480);  //Calculo padrão para leitura de irms(Amper)
